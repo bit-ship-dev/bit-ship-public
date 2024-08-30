@@ -9,7 +9,7 @@ export const useContainer = () => ({
 const runContainer = async (opts: RunOptions) => new Promise((resolve, reject) => {
 
   const volumes = opts.volumes?  ['-v', ...opts.volumes] : []
-  const command = spawn('docker', [
+  const process = spawn('docker', [
     'run', '--rm',
     '--name', opts.containerName,
     '-w', '/app',
@@ -25,9 +25,9 @@ const runContainer = async (opts: RunOptions) => new Promise((resolve, reject) =
     }
 
   log('-------------------------- running task')
-  command.stdout.on('data', (data: any) => log(`${data}`));
-  command.stderr.on('data', (data: any) => log(`${data}`));
-  command.on('close', (code: any) => {
+  process.stdout.on('data', (data: any) => log(`${data}`));
+  process.stderr.on('data', (data: any) => log(`${data}`));
+  process.on('close', (code: any) => {
     resolve(true)
     log(`--------------------------/ task finished code: ${code}`)
   });
