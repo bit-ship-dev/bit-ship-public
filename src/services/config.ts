@@ -7,15 +7,24 @@ import consola from "consola";
 let path = '.'
 let config = {}
 
-const getConfig = () => config
+export const setupConfig = async() => {
+  await loadConfig()
+}
 
 
-const setConfig = (newConfig: ClientConfig) => {
+export const useConfig = () => ({
+  getConfig: () => config,
+  setConfig,
+  loadConfig
+})
+
+
+function setConfig(newConfig: ClientConfig){
   config = newConfig;
   writeFile(`${path}/bit-ship.yml`, stringifyYAML(newConfig));
 }
 
-const loadConfig = async () => {
+async function loadConfig (){
   try {
     const configStr = await readFile(`${path}/bit-ship.yml`, 'utf8');
     config = parseYAML(configStr);
@@ -25,13 +34,3 @@ const loadConfig = async () => {
 }
 
 
-export const setupConfig = async() => {
-  await loadConfig()
-}
-
-
-export const useConfig = () => ({
-  getConfig,
-  setConfig,
-  loadConfig
-})
