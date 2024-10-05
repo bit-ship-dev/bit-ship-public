@@ -12,8 +12,8 @@
   },
   "scripts": {
     "start": "node ./dist/index.mjs",
-    "dev": "rollup -c --watch",
-    "rollup": "rollup -c",
+    "dev": "npm run build && npm start",
+    "r": "rollup -c",
     "build": "npx mkdist .",
     "lint": "eslint ./src --ext .vue,.js,.ts,.cjs,.mjs"
   },
@@ -25,7 +25,6 @@
     "citty": "^0.1.6",
     "confbox": "^0.1.7",
     "consola": "^3.2.3",
-    "fs-memo": "^1.2.0",
     "ofetch": "^1.3.4",
     "unstorage": "^1.10.2",
     "uuid": "^10.0.0"
