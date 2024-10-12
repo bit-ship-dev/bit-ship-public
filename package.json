@@ -12,9 +12,8 @@
   },
   "scripts": {
     "start": "node ./dist/index.mjs",
-    "dev": "npm run build && npm start",
-    "r": "rollup -c",
-    "build": "npx mkdist .",
+    "dev": "rollup -c --watch",
+    "build": "rollup -c",
     "lint": "eslint ./src --ext .vue,.js,.ts,.cjs,.mjs"
   },
   "dependencies": {
@@ -30,14 +29,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^0.4.4",
     "@types/uuid": "^10.0.0",
-    "mkdist": "^1.5.4",
-    "rollup": "^4.18.0",
-    "rollup-plugin-typescript2": "^0.36.0",
     "typescript": "^5.5.2"
   }
 }
