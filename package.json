@@ -12,9 +12,10 @@
   },
   "scripts": {
     "start": "node ./dist/index.mjs",
-    "dev": "rollup -c --watch",
-    "build": "rollup -c",
-    "lint": "eslint --config ../../packages/eslint/configs/base.js ./src --ext .ts,.mts"
+    "dev": "rollup --config ../../packages/rollup/configs/lib.mjs --watch",
+    "build": "npm run typecheck && rollup --config ../../packages/rollup/configs/lib.mjs",
+    "lint": "eslint --config ../../packages/eslint/configs/base.js ./src --ext .ts,.mts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@sentry/node": "^8.26.0",
