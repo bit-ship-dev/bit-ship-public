@@ -1,9 +1,9 @@
 {
   "name": "bit-ship",
+  "description": "Bit-Ship CLI",
   "type": "module",
   "public": true,
   "version": "0.0.1",
-  "description": "Bit-Ship CLI",
   "bin": {
     "bit-ship": "bin/bin.js"
   },
@@ -14,12 +14,11 @@
     "start": "node ./dist/index.mjs",
     "dev": "rollup -c --watch",
     "build": "rollup -c",
-    "lint": "eslint ./src --ext .vue,.js,.ts,.cjs,.mjs"
+    "lint": "eslint --config ../../packages/eslint/configs/base.js ./src --ext .ts,.mts"
   },
   "dependencies": {
     "@sentry/node": "^8.26.0",
     "@sentry/profiling-node": "^8.26.0",
-    "@sentry/rollup-plugin": "^2.22.2",
     "chalk": "^5.3.0",
     "citty": "^0.1.6",
     "confbox": "^0.1.7",
@@ -29,7 +28,6 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/uuid": "^10.0.0",
-    "typescript": "^5.5.2"
+    "@types/uuid": "^10.0.0"
   }
 }
