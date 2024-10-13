@@ -15,7 +15,8 @@ export default defineCommand({
       required: true,
     },
   },
-  run({ _args }) {
+  // @ts-ignore
+  run({ args }) {
     const {runContainer} = useContainer();
     consola.start('Running task');
     runContainer({containerName: 'test', image: 'node:22-alpine', script: 'node -v'});
