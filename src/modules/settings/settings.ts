@@ -15,8 +15,7 @@ export default defineCommand({
       required: false,
     },
   },
-  // @ts-ignore
-  async run({ args }) {
+  async run() {
 
     const storage = useStorage()
 
