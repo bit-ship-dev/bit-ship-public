@@ -1,21 +1,21 @@
-import consola from "consola";
-import {defineCommand} from "citty";
-import {useContainer} from '../../services/container';
-import {useStorage} from "../../services/storage";
+import consola from 'consola';
+import {defineCommand} from 'citty';
+// import {useContainer} from '../../services/container';
+import {useStorage} from '../../services/storage';
 
 export default defineCommand({
   meta: {
-    name: "settings",
-    description: "Configure bitship cli"
+    name: 'settings',
+    description: 'Configure bitship cli'
   },
   args: {
     section: {
-      description: "Analytics",
-      type: "positional",
+      description: 'Analytics',
+      type: 'positional',
       required: false,
     },
   },
-  async run({ args }) {
+  async run({ _args }) {
 
     const storage = useStorage()
 

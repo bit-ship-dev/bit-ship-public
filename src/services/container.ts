@@ -6,7 +6,7 @@ export const useContainer = () => ({
   runContainer
 })
 
-const runContainer = async (opts: RunOptions) => new Promise((resolve, reject) => {
+const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
 
   const volumes = opts.volumes?  ['-v', ...opts.volumes] : []
   const process = spawn('docker', [

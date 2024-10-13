@@ -1,8 +1,8 @@
 import { defineCommand, runMain } from 'citty';
-import {setupConsola} from "./services/consola";
-import {setupConfig} from "./services/config";
-import {setupStorage} from "./services/storage";
-import {setupAnalytics} from "./services/analytics";
+import {setupConsola} from './services/consola';
+import {setupConfig} from './services/config';
+import {setupStorage} from './services/storage';
+import {setupAnalytics} from './services/analytics';
 
 const main = defineCommand({
   meta: {

@@ -1,10 +1,10 @@
-import {createStorage, restoreSnapshot, type Storage} from "unstorage";
-import fsDriver from "unstorage/drivers/fs";
-import consola from "consola";
+import {createStorage, type Storage} from 'unstorage';
+import fsDriver from 'unstorage/drivers/fs';
+import consola from 'consola';
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 import os from 'os';
-import {useAnalytics} from "./analytics";
+import {useAnalytics} from './analytics';
 
 const {capture} = useAnalytics()
 // Get the home directory path
@@ -24,7 +24,7 @@ export const setupStorage = async () => {
 
 export const useStorage = (): Storage => {
   if (!storage)  {
-    consola.error("Storage not initialized")
+    consola.error('Storage not initialized')
   }
   return storage
 }

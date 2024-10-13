@@ -1,10 +1,10 @@
-import {parseYAML, stringifyYAML} from "confbox";
-import {readFile} from "fs/promises";
-import {writeFile} from "unstorage/drivers/utils/node-fs";
+import {parseYAML, stringifyYAML} from 'confbox';
+import {readFile} from 'fs/promises';
+import {writeFile} from 'unstorage/drivers/utils/node-fs';
 import {ClientConfig} from './config.d'
-import consola from "consola";
+import consola from 'consola';
 
-let path = '.'
+const path = '.'
 let config = {}
 
 export const setupConfig = async() => {
@@ -28,7 +28,7 @@ async function loadConfig (){
   try {
     const configStr = await readFile(`${path}/bit-ship.yml`, 'utf8');
     config = parseYAML(configStr);
-  } catch (err) {
+  } catch (_err: any) {
     consola.warn('No bit-ship.yml file found. Create it with analyse command');
   }
 }

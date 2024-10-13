@@ -1,7 +1,7 @@
 import {consola} from 'consola';
 
 import * as Sentry from '@sentry/node';
-import {useStorage} from "./storage";
+import {useStorage} from './storage';
 
 
 export const setupConsola = async () => {
@@ -15,7 +15,7 @@ export const setupConsola = async () => {
 
 
   Sentry.init({
-    dsn: "https://41b66ad2d847d5fbc79561d55988ddee@o4507703272996864.ingest.de.sentry.io/4507793192124496",
+    dsn: 'https://41b66ad2d847d5fbc79561d55988ddee@o4507703272996864.ingest.de.sentry.io/4507793192124496',
     integrations: [
       // nodeProfilingIntegration(),
     ],
