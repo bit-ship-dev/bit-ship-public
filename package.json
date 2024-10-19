@@ -3,7 +3,7 @@
   "description": "Bit-Ship CLI",
   "type": "module",
   "public": true,
-  "version": "0.0.1-1729340703037",
+  "version": "0.0.1",
   "bin": {
     "bit-ship": "bin/bin.js"
   },
