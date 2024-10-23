@@ -6,7 +6,7 @@ import {useStorage} from '../../services/storage';
 export default defineCommand({
   meta: {
     name: 'settings',
-    description: 'Configure bitship cli'
+    description: 'Configure bit-ship cli'
   },
   args: {
     section: {

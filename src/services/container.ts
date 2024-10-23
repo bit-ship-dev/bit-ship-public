@@ -1,4 +1,5 @@
 import {spawn} from 'child_process';
+import consola from "consola";
 // import chalk from "chalk";
 
 
@@ -7,29 +8,29 @@ export const useContainer = () => ({
 })
 
 const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
+  const name = opts.containerName? ['--name', opts.containerName] : ''
+  const env = opts?.env ? [`-e`, ...formatEnv(opts.env)]: []
+  const volumes = opts?.volumes ?  ['-v', ...opts.volumes] : []
 
-  const volumes = opts.volumes?  ['-v', ...opts.volumes] : []
-  const process = spawn('docker', [
-    'run', '--rm',
-    '--name', opts.containerName,
-    '-w', '/app',
-    '-e', ...formatEnv(opts.env),
-    ...volumes,
+  const args = [
+    'run', '--rm', ...name,
+    '-w', '/app', ...env, ...volumes,
     opts.image, ...opts.script.split(' ')
-  ]);
+  ]
+  const process = spawn('docker', args);
 
   const log = opts.detouched ?
     (_output: any) => {} :
-    (output: any) => {
-      console.log(output)
+    (output: any, type: 'log' | 'error' | 'success' | 'start') => {
+      consola[type](output)
     }
 
-  log('-------------------------- running task')
-  process.stdout.on('data', (data: any) => log(`${data}`));
-  process.stderr.on('data', (data: any) => log(`${data}`));
+  log('-------------------------- Running task', 'start')
+  process.stdout.on('data', (data: any) => log(`${data}`, 'log'));
+  process.stderr.on('data', (data: any) => log(`${data}`,'log'));
   process.on('close', (code: any) => {
     resolve(true)
-    log(`--------------------------/ task finished code: ${code}`)
+    log(`--------------------------/ Task finished code: ${code}`, 'success')
   });
 })
 

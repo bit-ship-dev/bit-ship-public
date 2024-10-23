@@ -18,7 +18,6 @@ export const useConfig = () => ({
   loadConfig
 })
 
-
 function setConfig(newConfig: ClientConfig){
   config = newConfig;
   writeFile(`${path}/bit-ship.yml`, stringifyYAML(newConfig));

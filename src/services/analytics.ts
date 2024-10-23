@@ -1,5 +1,5 @@
 import {ofetch} from 'ofetch';
-
+import consola from "consola";
 const url = 'http://localhost:3000/api'
 
 
@@ -12,11 +12,15 @@ export const useAnalytics = () => ({
 })
 
 async function capture(eventName: EventName, data: any) {
-  await ofetch(`${url}/analytics/cli/${eventName}`, {
-    method: 'POST',
-    body: data,
-    headers: { 'Content-Type': 'application/json' }
-  })
+  try {
+    await ofetch(`${url}/analytics/cli/${eventName}`, {
+      method: 'POST',
+      body: data,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  } catch (err) {
+    // TODO silent log
+  }
 }
 
 
