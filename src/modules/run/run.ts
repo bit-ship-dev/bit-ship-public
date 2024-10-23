@@ -1,13 +1,13 @@
 import consola from 'consola';
 import {defineCommand} from 'citty';
 import {useContainer} from '../../services/container';
-import {useConfig} from "../../services/config";
+import {useConfig} from '../../services/config';
 
 
 const {runContainer} = useContainer();
 const containerName = 'test';
 const image = 'node:22-alpine'
-const {getConfig} = useConfig();
+const {getConfig, getConfigPath} = useConfig();
 const config = getConfig();
 
 
@@ -25,19 +25,23 @@ export const run = defineCommand({
   },
 
   run({args}) {
-    const task = args.task;
-    if (!config || !config.tasks || !config.tasks[task]) {
-      return consola.error(`Task '${task}' not found`);
+    const taskName = args.task;
+    const task = getConfigPath(['tasks', taskName], undefined);
+    // @ts-ignore
+    const script = task?.script || '';
+    if (!task || !script) {
+      return consola.error(`Task '${taskName}' not found`);
     }
-    const image = config.tasks[task].image || config.images?.default;
+    const image = getConfigPath(['tasks', taskName, 'image'], '') || getConfigPath(['config', 'images', 'default'], '')
     if (!image) {
       return consola.error(`No image found for task '${task}'`);
     }
-    const script = config.tasks?.[task]?.script;
     consola.start('Running task')
     runContainer({containerName, image, script});
   },
 });
+
+
 
 
 export const exec=  defineCommand({
@@ -55,7 +59,7 @@ export const exec=  defineCommand({
       type: 'string',
       required: false,
       description: 'Image to use',
-      default: config?.images?.default || ''
+      default: getConfigPath(['images', 'default'], '')
     }
   },
   async run({args}) {

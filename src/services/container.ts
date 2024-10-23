@@ -1,5 +1,5 @@
 import {spawn} from 'child_process';
-import consola from "consola";
+import consola from 'consola';
 // import chalk from "chalk";
 
 
@@ -9,7 +9,7 @@ export const useContainer = () => ({
 
 const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
   const name = opts.containerName? ['--name', opts.containerName] : ''
-  const env = opts?.env ? [`-e`, ...formatEnv(opts.env)]: []
+  const env = opts?.env ? ['-e', ...formatEnv(opts.env)]: []
   const volumes = opts?.volumes ?  ['-v', ...opts.volumes] : []
 
   const args = [
