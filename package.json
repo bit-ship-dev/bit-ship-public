@@ -11,7 +11,7 @@
     "access": "public"
   },
   "scripts": {
-    "start": "node ./dist/index.js",
+    "start": "node ./bin/bin.js",
     "dev": "rollup --config ../../packages/rollup/configs/cli.mjs --watch",
     "build": "npm run typecheck && rollup --config ../../packages/rollup/configs/cli.mjs",
     "lint": "eslint --config ../../packages/eslint/configs/base.js ./src --ext .ts,.mts",

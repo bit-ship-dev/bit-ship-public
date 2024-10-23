@@ -3,29 +3,34 @@ import {setupConsola} from './services/consola';
 import {setupConfig} from './services/config';
 import {setupStorage} from './services/storage';
 import {setupAnalytics} from './services/analytics';
-
-const main = defineCommand({
-  meta: {
-    name: 'bit-ship',
-    version: '1.0.0',
-    description: 'Bit-Ship CLI https://bit-ship.dev/',
-  },
-  subCommands: {
-    analyse: () => import('./modules/analyse/analyse').then((r) => r.default),
-    run:() => import('./modules/run/run').then((r) => r.default),
-    settings:() => import('./modules/settings/settings').then((r) => r.default),
-  }
-});
-
+import {readFile} from 'fs/promises'
 
 async function init(){
-  // APP CORE
+  const version = await readVersion()
   await setupStorage();
   setupConsola();
   setupAnalytics();
   setupConfig();
+
+  const main = defineCommand({
+    meta: {
+      name: 'bit-ship',
+      version,
+      description: 'Bit-Ship CLI https://bit-ship.dev/',
+    },
+    subCommands: {
+      analyse: () => import('./modules/analyse/analyse').then((r) => r.default),
+      run:() => import('./modules/run/run').then((r) => r.default),
+      settings:() => import('./modules/settings/settings').then((r) => r.default),
+    }
+  });
   runMain(main);
 }
-
-
 init()
+
+
+async function readVersion(): Promise<string> {
+  const packageJsonSTR = await readFile('./package.json', 'utf8');
+  const packageJson = JSON.parse(packageJsonSTR);
+  return packageJson.version || '0.0.0'
+}
