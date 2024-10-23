@@ -7,8 +7,7 @@ import {useConfig} from '../../services/config';
 const {runContainer} = useContainer();
 const containerName = 'test';
 const image = 'node:22-alpine'
-const {getConfig, getConfigPath} = useConfig();
-const config = getConfig();
+const {getConfigPath} = useConfig();
 
 
 export const run = defineCommand({

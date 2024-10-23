@@ -6,6 +6,7 @@ import type {Config as ConfigType} from '@repo/ts/types/config'
 import consola from 'consola';
 
 const path = '.'
+// eslint-disable-next-line
 let config: Config | {} = {}
 
 export const setupConfig = async() => {
