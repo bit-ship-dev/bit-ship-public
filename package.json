@@ -29,6 +29,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@repo/rollup": "*",
     "@repo/ts": "*",
     "@types/uuid": "^10.0.0"
   }
