@@ -11,17 +11,15 @@
     "access": "public"
   },
   "scripts": {
-    "start": "node ./dist/index.mjs",
-    "dev": "rollup --config ../../packages/rollup/configs/lib.mjs --watch",
-    "build": "npm run typecheck && rollup --config ../../packages/rollup/configs/lib.mjs",
+    "start": "node ./bin/bin.js",
+    "dev": "rollup --config ../../packages/rollup/configs/cli.mjs --watch",
+    "build": "npm run typecheck && rollup --config ../../packages/rollup/configs/cli.mjs",
     "lint": "eslint --config ../../packages/eslint/configs/base.js ./src --ext .ts,.mts",
     "nightly": "node ./cli/nightly.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ts": "*",
     "@sentry/node": "^8.26.0",
-    "@sentry/profiling-node": "^8.26.0",
     "chalk": "^5.3.0",
     "citty": "^0.1.6",
     "confbox": "^0.1.7",
@@ -31,6 +29,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@repo/ts": "*",
     "@types/uuid": "^10.0.0"
   }
 }
