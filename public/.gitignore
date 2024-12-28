@@ -1,6 +1,7 @@
 # Coverage directory used by imager like istanbul
 coverage
 
+.idea
 
 .bit-ship
 
