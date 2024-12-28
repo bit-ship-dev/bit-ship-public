@@ -1,0 +1,45 @@
+{
+  "name": "bit-ship",
+  "description": "Bit-Ship CLI",
+  "type": "module",
+  "public": true,
+  "version": "0.0.2",
+  "bin": {
+    "bit-ship": "bin/bin.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "start": "node ./bin/bin.js",
+    "dev": "rollup --watch",
+    "build": "rollup --config ./rollup.config.js",
+    "lint": "eslint --config ../../packages/eslint/configs/base.js ./src",
+    "nightly": "node ./cli/nightly.mjs",
+    "typecheck": "tsc --noEmit",
+    "publish-cleanup": "node ./cli/cleanup.js",
+    "publish-nightly": "pnpm nightly && npm publish --tag nightly --access public"
+  },
+  "dependencies": {
+    "@sentry/node": "catalog:",
+    "chalk": "^5.3.0",
+    "citty": "^0.1.6",
+    "confbox": "^0.1.7",
+    "consola": "catalog:",
+    "ofetch": "catalog:",
+    "unstorage": "^1.10.2",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@bit-ship/types": "workspace:*",
+    "@rollup/plugin-typescript": "catalog:",
+    "@rollup/plugin-commonjs": "catalog:",
+    "@rollup/plugin-json": "catalog:",
+    "@rollup/plugin-terser": "catalog:",
+    "@repo/eslint": "workspace:*",
+    "@types/uuid": "^10.0.0",
+    "typescript": "catalog:",
+    "rollup": "catalog:",
+    "tslib": "catalog:"
+  }
+}

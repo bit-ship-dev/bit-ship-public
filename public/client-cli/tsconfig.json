@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "outDir": "./dist",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "tslib" : ["./node_modules/tslib/tslib.d.ts"]
+    }
+  },
+  "include": ["src"],
+  "types": ["node"],
+  "exclude": ["node_modules", "dist"],
+}

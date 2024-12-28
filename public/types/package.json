@@ -1,0 +1,9 @@
+{
+  "name": "@bit-ship/types",
+  "private": false,
+  "public": true,
+  "type": "module",
+  "publishConfig": {
+    "access": "private"
+  }
+}
