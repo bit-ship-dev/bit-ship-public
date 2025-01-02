@@ -13,7 +13,7 @@ let storage! : Storage
 
 export const setupStorage = async () => {
   storage = createStorage({
-    driver: fsDriver({ base: `${homeDir}/.bit-ship` }),
+    driver: fsDriver({ base: `${homeDir}/.bit-ship/data` }),
   });
   const date = await storage.getItem('lastUsageDate')
   if (date) {

@@ -1,7 +1,8 @@
 import {ofetch} from 'ofetch';
 import consola from 'consola';
+import {useEnvironment} from './environme';
 
-const url = 'http://localhost:3000/api'
+const {apiURL} = useEnvironment()
 
 
 export const setupAnalytics = async () => {
@@ -14,7 +15,7 @@ export const useAnalytics = () => ({
 
 async function capture(eventName: EventName, data: any) {
   try {
-    await ofetch(`${url}/analytics/cli/${eventName}`, {
+    await ofetch(`${apiURL}/analytics/cli/${eventName}`, {
       method: 'POST',
       body: data,
       headers: { 'Content-Type': 'application/json' }

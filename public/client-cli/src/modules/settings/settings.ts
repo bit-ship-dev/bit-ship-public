@@ -16,10 +16,7 @@ export default defineCommand({
     },
   },
   async run() {
-
     const storage = useStorage()
-
-
     const option = await consola.prompt('What would you like to configure', {
       type: 'select',
       required: true,
@@ -28,6 +25,13 @@ export default defineCommand({
         {label: 'Reset settings', value: 'reset', hint: 'Delete all settings'},
       ],
     });
+
+    // @ts-ignore
+    if (option === 'reset') {
+      await storage.clear()
+      consola.success('All settings have been reset')
+    }
+
     // @ts-ignore
     if(option === 'crashreports') {
       const state = await consola.prompt('Crash reports - we are using Sentry.io for monitoring crashes for improving our products', {

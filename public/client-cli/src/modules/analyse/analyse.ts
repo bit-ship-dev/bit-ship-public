@@ -6,9 +6,12 @@ import {readFile, unlink} from 'fs/promises'
 import {useConfig} from '../../services/config';
 import {useContainer} from '../../services/container';
 import {ClientConfig} from '../../services/config.d'
+import {useEnvironment} from '../../services/environme';
 
 
 const {setConfig} = useConfig();
+
+const {apiURL} = useEnvironment()
 
 type AnalyserReport  = Report['1.0']
 
@@ -32,24 +35,49 @@ export default defineCommand({
     const {dependencies, tasks} = await manualValidation(report, tools)
 
     consola.start('We are preparing image for you');
-    // TODO call build endpoint
-    await setConfig({
-      version: '1.0',
-      images: {
-        default: 'XXXXXXX'
-      },
-      dependencies,
-      tasks
-    });
-    consola.success('Configuration saved');
+    try {
+      const {imageName} = await getImage(dependencies, report)
+      await setConfig({
+        version: '1.0',
+        images: {
+          default: imageName
+        },
+        dependencies,
+        tasks
+      });
+      consola.success('Configuration saved');
+    } catch (error) {
+      consola.error('Failed to prepare image')
+      consola.error(error)
+    }
   },
 });
+
+const getImage = (dependencies: ClientConfig['dependencies'], report: Report['1.0']) =>
+  // eslint-disable-next-line no-async-promise-executor
+  new Promise<any>(async (resolve, reject) => {
+    const data = await ofetch(`${apiURL}/public/v1/image`, {method: 'POST', body: {report}})
+    if(data.status === 'queued' || data.status === 'building') {
+      resolve(data)
+      return setTimeout(async() => {
+        try {
+          resolve(await getImage(dependencies, report))
+        } catch (error) {
+          reject(error)
+        }
+      }, 3000)
+    }
+    else if(data.status === 'prepared') {
+      return resolve(data)
+    }
+    reject(data)
+  }
+  )
 
 
 async function getReport(path: string): Promise<Report['1.0']> {
   const reportFile = 'tmp_report.json';
   consola.start(`Analyse your project ${path}`);
-  // TODO pull container from registry
   const {runContainer} = useContainer();
   await runContainer({
     containerName : 'analyser-cli-'+Date.now(),
@@ -139,8 +167,7 @@ async function manualValidation(report: AnalyserReport, tools: any): Promise<Man
 
 
 async function fetchTools()    {
-  // TODO change to prod API
-  const tools = await ofetch('http://localhost:3000/api/public/v1/tools')
+  const tools = await ofetch(`${apiURL}/public/v1/tools`)
   return tools
 }
 
