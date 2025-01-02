@@ -11,10 +11,12 @@ const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
   const name = opts.containerName? ['--name', opts.containerName] : ''
   const env = opts?.env ? ['-e', ...formatEnv(opts.env)]: []
   const volumes = opts?.volumes ?  ['-v', ...opts.volumes] : []
+  const platform = opts.platform ? ['--platform', opts.platform] : []
 
   const args = [
     'run', '--rm', ...name,
     '-w', '/app', ...env, ...volumes,
+    ...platform,
     opts.image, ...opts.script.split(' ')
   ]
 
@@ -46,6 +48,7 @@ interface RunOptions {
   containerName: string;
   image: string;
   script: string;
+  platform?: string;
   detouched?: boolean;
   ports?: string[];
   volumes?: string[];

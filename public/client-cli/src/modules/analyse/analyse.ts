@@ -6,7 +6,7 @@ import {readFile, unlink} from 'fs/promises'
 import {useConfig} from '../../services/config';
 import {useContainer} from '../../services/container';
 import {ClientConfig} from '../../services/config.d'
-import {useEnvironment} from '../../services/environme';
+import {useEnvironment} from '../../services/environment';
 
 
 const {setConfig} = useConfig();
@@ -36,7 +36,7 @@ export default defineCommand({
 
     consola.start('We are preparing image for you');
     try {
-      const {imageName} = await getImage(dependencies, report)
+      const {imageName} = await getImage(dependencies, report, 0)
       await setConfig({
         version: '1.0',
         images: {
@@ -48,31 +48,44 @@ export default defineCommand({
       consola.success('Configuration saved');
     } catch (error) {
       consola.error('Failed to prepare image')
-      consola.error(error)
+      console.log(error)
     }
   },
 });
 
-const getImage = (dependencies: ClientConfig['dependencies'], report: Report['1.0']) =>
-  // eslint-disable-next-line no-async-promise-executor
-  new Promise<any>(async (resolve, reject) => {
-    const data = await ofetch(`${apiURL}/public/v1/image`, {method: 'POST', body: {report}})
-    if(data.status === 'queued' || data.status === 'building') {
-      resolve(data)
-      return setTimeout(async() => {
-        try {
-          resolve(await getImage(dependencies, report))
-        } catch (error) {
-          reject(error)
+const getImage =
+  (dependencies: ClientConfig['dependencies'], report: Report['1.0'], retry: number) =>
+    new Promise<any>((resolve, reject) => {
+      const body = {
+        report: {
+          version: report.version,
+          dependencies: report.dependencies
         }
-      }, 3000)
+      }
+      ofetch(`${apiURL}/public/v1/image`, {method: 'POST', body})
+        .then((data) => {
+          if(data.status === 'queued' || data.status === 'building') {
+            resolve(data)
+            return setTimeout(async() => {
+              if (retry > 200) {
+                reject('Failed to prepare image')
+              }
+              try {
+                resolve(await getImage(dependencies, report, retry++))
+              } catch (error) {
+                consola.error(error)
+                reject(error)
+              }
+            }, 1000)
+          }
+          else if(data.status === 'prepared') {
+            return resolve(data)
+          }
+          reject(data)
+        })
+        .catch(reject)
     }
-    else if(data.status === 'prepared') {
-      return resolve(data)
-    }
-    reject(data)
-  }
-  )
+    )
 
 
 async function getReport(path: string): Promise<Report['1.0']> {
@@ -82,7 +95,8 @@ async function getReport(path: string): Promise<Report['1.0']> {
   await runContainer({
     containerName : 'analyser-cli-'+Date.now(),
     image: 'bitship/analyser-cli',
-    detouched: true,
+    platform: 'linux/amd64',
+    detouched: false,
     script: 'node /analyser-cli/index.js',
     volumes: [
       `${path}:/app`

@@ -1,6 +1,6 @@
 import {ofetch} from 'ofetch';
 import consola from 'consola';
-import {useEnvironment} from './environme';
+import {useEnvironment} from './environment';
 
 const {apiURL} = useEnvironment()
 
