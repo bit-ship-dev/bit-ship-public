@@ -21,25 +21,25 @@
     "publish-nightly": "pnpm nightly && npm publish --tag nightly --access public"
   },
   "dependencies": {
-    "@sentry/node": "catalog:",
+    "@sentry/node": "^8.26.0",
     "chalk": "^5.3.0",
     "citty": "^0.1.6",
     "confbox": "^0.1.7",
-    "consola": "catalog:",
-    "ofetch": "catalog:",
+    "consola": "^3.2.3",
+    "ofetch": "^1.4.1",
     "unstorage": "^1.10.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@bit-ship/types": "workspace:*",
-    "@rollup/plugin-typescript": "catalog:",
-    "@rollup/plugin-commonjs": "catalog:",
-    "@rollup/plugin-json": "catalog:",
-    "@rollup/plugin-terser": "catalog:",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "@rollup/plugin-commonjs": "28.0.2",
+    "@rollup/plugin-json": "6.1.0",
+    "@rollup/plugin-terser": "0.4.4",
     "@repo/eslint": "workspace:*",
     "@types/uuid": "^10.0.0",
-    "typescript": "catalog:",
-    "rollup": "catalog:",
-    "tslib": "catalog:"
+    "typescript": "^5.7.2",
+    "rollup": "~4.28.1",
+    "tslib": "2.8.1"
   }
 }
