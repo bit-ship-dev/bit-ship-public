@@ -1,5 +1,6 @@
 {
   "name": "@bit-ship/types",
+  "version": "1.0.0",
   "private": false,
   "public": true,
   "type": "module",
