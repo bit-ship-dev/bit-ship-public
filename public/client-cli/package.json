@@ -17,7 +17,6 @@
     "lint": "eslint --config ../../packages/eslint/configs/base.js ./src",
     "nightly": "node ./cli/nightly.mjs",
     "typecheck": "tsc --noEmit",
-    "publish-cleanup": "node ./cli/cleanup.js",
     "publish-nightly": "pnpm nightly && npm publish --tag nightly --access public"
   },
   "dependencies": {
