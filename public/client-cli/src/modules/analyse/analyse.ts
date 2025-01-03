@@ -56,10 +56,18 @@ export default defineCommand({
 const getImage =
   (dependencies: ClientConfig['dependencies'], report: Report['1.0'], retry: number) =>
     new Promise<any>((resolve, reject) => {
+      consola.log('Preparing image');
+      // @ts-ignore
+      const dependencies = Object.keys(report.dependencies).reduce((acc, key) => {
+        // @ts-ignore
+        acc[key] = report.dependencies[key].version
+        return acc
+      }, {})
+
       const body = {
         report: {
           version: report.version,
-          dependencies: report.dependencies
+          dependencies
         }
       }
       ofetch(`${apiURL}/public/v1/image`, {method: 'POST', body})
