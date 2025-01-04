@@ -13,8 +13,8 @@
   "scripts": {
     "start": "node ./bin/bin.js",
     "dev": "rollup --watch",
-    "build": "rollup --config ./rollup.config.js",
-    "lint": "eslint --config ../../packages/eslint/configs/base.js ./src",
+    "build": "rollup --config ../rollup/configs/cli.js",
+    "lint": "eslint --config ../eslint/configs/base.js ./src",
     "nightly": "node ./cli/nightly.mjs",
     "typecheck": "tsc --noEmit",
     "publish-nightly": "pnpm nightly && npm publish --tag nightly --access public"
@@ -34,6 +34,7 @@
     "@rollup/plugin-typescript": "^12.1.1",
     "@rollup/plugin-commonjs": "28.0.2",
     "@rollup/plugin-json": "6.1.0",
+    "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "0.4.4",
     "@repo/eslint": "workspace:*",
     "@types/uuid": "^10.0.0",

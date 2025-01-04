@@ -1,4 +1,6 @@
 packages:
   - client-cli/*
   - types/*
+  - rollup/*
+  - eslint/*
 
