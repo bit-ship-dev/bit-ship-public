@@ -8,8 +8,6 @@ const main = async () => {
     const packageJSON = JSON.parse(await readFile('package.json', 'utf-8'))
     const commitHash = out.split('\n')[0];
     packageJSON.version =  `${packageJSON.version}-${commitHash}`
-    delete packageJSON.dependencies
-    delete packageJSON.devDependencies
     delete packageJSON.scripts
     await writeFile('package.json', JSON.stringify(packageJSON, null, 2))
     // Update Package.json
