@@ -105,7 +105,7 @@ async function getReport(path: string): Promise<Report['1.0']> {
     image: 'bitship/analyser-cli',
     platform: 'linux/amd64',
     detouched: false,
-    script: 'node /analyser-cli/index.js',
+    script: 'node /analyser-cli/index.mjs',
     volumes: [
       `${path}:/app`
     ],

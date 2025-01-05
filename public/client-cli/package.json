@@ -1,15 +1,9 @@
 {
   "name": "bit-ship",
-  "description": "Bit-Ship CLI",
+  "description": "Bit-Ship CLI is tool that analyses your code and generates a custom environment for your needs\nYou can use if to local development, CI/CD or even production.",
   "type": "module",
   "public": true,
   "version": "0.0.3",
-  "bin": {
-    "bit-ship": "bin/bin.js"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "start": "node ./bin/bin.js",
     "dev": "rollup --watch",
@@ -20,26 +14,44 @@
     "publish-nightly": "pnpm nightly && npm publish --tag nightly --access public"
   },
   "dependencies": {
-    "@sentry/node": "^8.26.0",
-    "chalk": "^5.3.0",
-    "citty": "^0.1.6",
-    "confbox": "^0.1.7",
-    "consola": "^3.2.3",
-    "ofetch": "^1.4.1",
+    "@sentry/node": "8.47.0",
+    "chalk": "5.4.1",
+    "citty": "0.1.6",
+    "confbox": "0.1.8",
+    "consola": "3.3.3",
+    "ofetch": "1.4.1",
     "unstorage": "^1.10.2",
-    "uuid": "^10.0.0"
+    "uuid": "11.0.3"
   },
   "devDependencies": {
     "@bit-ship/types": "workspace:*",
     "@rollup/plugin-typescript": "^12.1.1",
-    "@rollup/plugin-commonjs": "28.0.2",
-    "@rollup/plugin-json": "6.1.0",
-    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-terser": "0.4.4",
     "@repo/eslint": "workspace:*",
     "@types/uuid": "^10.0.0",
     "typescript": "^5.7.2",
-    "rollup": "~4.28.1",
-    "tslib": "2.8.1"
+    "rollup": "^4.28.1",
+    "tslib": "^2.8.1"
+  },
+  "bin": {
+    "bit-ship": "bin/bin.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license" : {
+    "type" : "MIT",
+    "url" : "https://github.com/bit-ship-dev/bit-ship-public/blob/main/LICENSE"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bit-ship-dev/bit-ship-public"
+  },
+  "keywords": ["bit-ship", "cli", "env", "environment","tooling", "analyser", "analyzer"],
+  "homepage": "https://github.com/owner/project#readme",
+  "bugs": {
+    "url": "https://discord.com/channels/1260997714049630268/1325444528546643979"
   }
 }

@@ -2,23 +2,29 @@ import {readFile, writeFile} from 'fs/promises';
 import {exec} from 'child_process';
 
 const main = async () => {
-  const packageJSON = JSON.parse(await readFile('package.json', 'utf-8'))
-  exec('git rev-parse --short HEAD', async (err, stdout, stderr) => {
-    const commitHash = stdout.split('\n')[0];
-    packageJSON.version =  packageJSON.version + '-' + commitHash
+  try {
+    // Update Package.json
+    const out = execProm('git rev-parse --short HEAD')
+    const packageJSON = JSON.parse(await readFile('package.json', 'utf-8'))
+    const commitHash = out.split('\n')[0];
+    packageJSON.version =  `${packageJSON.version}-${commitHash}`
+    delete packageJSON.dependencies
+    delete packageJSON.devDependencies
+    delete packageJSON.scripts
     await writeFile('package.json', JSON.stringify(packageJSON, null, 2))
-
+    // Update Package.json
     const tag = `client-cli-${commitHash}`
-    const command = `git tag ${tag} && git push --force origin ${tag}`
-    exec(command, (err, stdout, stderr) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      console.log(stdout)
-    })
-  })
-
+    await execProm(`git tag ${tag} && git push --force origin ${tag}`)
+  } catch (error){
+    console.error(error)
+  }
 }
-
 main()
+const execProm = (command) => new Promise((resolve, reject) => {
+  exec(command, async (err, stdout, stderr) => {
+    if (err) {
+      return reject(err)
+    }
+    resolve(stdout)
+  })
+})
