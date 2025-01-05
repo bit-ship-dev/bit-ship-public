@@ -8,7 +8,7 @@ const main = async () => {
     packageJSON.version =  packageJSON.version + '-' + commitHash
     await writeFile('package.json', JSON.stringify(packageJSON, null, 2))
 
-    const tag = `client-cli-${packageJSON.version}`
+    const tag = `client-cli-${commitHash}`
     const command = `git tag ${tag} && git push --force origin ${tag}`
     exec(command, (err, stdout, stderr) => {
       if (err) {
