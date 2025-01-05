@@ -1,3 +1,3 @@
 export const useEnvironment = () => ({
-  apiURL: process.env.API_URL || 'https://api.bit-ship.dev'
+  apiURL: process.env.API_URL || 'http://localhost:3000/api',
 })

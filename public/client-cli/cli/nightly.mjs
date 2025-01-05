@@ -4,7 +4,7 @@ import {exec} from 'child_process';
 const main = async () => {
   try {
     // Update Package.json
-    const out = execProm('git rev-parse --short HEAD')
+    const out = await execProm('git rev-parse --short HEAD')
     const packageJSON = JSON.parse(await readFile('package.json', 'utf-8'))
     const commitHash = out.split('\n')[0];
     packageJSON.version =  `${packageJSON.version}-${commitHash}`
@@ -19,7 +19,7 @@ const main = async () => {
     console.error(error)
   }
 }
-main()
+
 const execProm = (command) => new Promise((resolve, reject) => {
   exec(command, async (err, stdout, stderr) => {
     if (err) {
@@ -28,3 +28,4 @@ const execProm = (command) => new Promise((resolve, reject) => {
     resolve(stdout)
   })
 })
+main()
