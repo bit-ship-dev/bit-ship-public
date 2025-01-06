@@ -3,6 +3,7 @@
 - fix: reset setting
 - fix: pnpm catalog issue
 - fix: platform docker image issue
+- fix: image preparation polling
 - feature: add package json metadata 
 - feature: call API to get image from report
 - refactor: bundle dependencies in instead of using external ones

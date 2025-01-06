@@ -20,17 +20,25 @@ interface Config_1_0 {
 
   // Image for tasks and scripts
   images: {
-    [imageName: string] : string
+    [imageName: 'default' | string] : string
   }
 
   tasks: {
-    [key in ScriptCategory]: {
+    [key: string]: {
       script: string,
+      localURL?: string,
       location?: string,
+      env? : {
+        [key: string]: string
+      }
+      ports?: string[]
+      volumes?: string[]
     }
   }
 
   dependencies: {
     [key in ToolsNames]?: string
   }
+
+  volumes: {}
 }

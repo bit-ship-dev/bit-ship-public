@@ -34,9 +34,14 @@ export default defineCommand({
     const tools = await fetchTools()
     const {dependencies, tasks} = await manualValidation(report, tools)
 
-    consola.start('We are preparing image for you');
+
     try {
-      const {imageName} = await getImage(dependencies, report, 0)
+      consola.start('Image build requested');
+      const {imageName} = await getImage({
+        version: report.version,
+        dependencies
+      }, 0)
+      consola.start('Generating initial bit-ship.yml config');
       await setConfig({
         version: '1.0',
         images: {
@@ -45,7 +50,7 @@ export default defineCommand({
         dependencies,
         tasks
       });
-      consola.success('Configuration saved');
+      consola.success('Analysis completed');
     } catch (error) {
       consola.error('Failed to prepare image')
       console.log(error)
@@ -53,48 +58,24 @@ export default defineCommand({
   },
 });
 
-const getImage =
-  (dependencies: ClientConfig['dependencies'], report: Report['1.0'], retry: number) =>
-    new Promise<any>((resolve, reject) => {
-      consola.log('Preparing image');
-      // @ts-ignore
-      const dependencies = Object.keys(report.dependencies).reduce((acc, key) => {
-        // @ts-ignore
-        acc[key] = report.dependencies[key].version
-        return acc
-      }, {})
-
-      const body = {
-        report: {
-          version: report.version,
-          dependencies
+const getImage = (report: any, retry: number) =>
+  new Promise<any>((resolve, reject) => {
+    ofetch(`${apiURL}/public/v1/image`, {method: 'POST', body: {report}})
+      .then((data) => {
+        if(data.state === 'prepared') {
+          consola.success('Image is ready')
+          return resolve(data)
+        } else if((data.state === 'queued' || data.state === 'building') && retry < 200) {
+          process.stdout.write(`\rimage status: ${data.state}`)
+          return setTimeout(() => {
+            getImage(report, retry++).then(resolve).catch(reject)
+          }, 2000)
         }
-      }
-      ofetch(`${apiURL}/public/v1/image`, {method: 'POST', body})
-        .then((data) => {
-          if(data.status === 'queued' || data.status === 'building') {
-            resolve(data)
-            return setTimeout(async() => {
-              if (retry > 200) {
-                reject('Failed to prepare image')
-              }
-              try {
-                resolve(await getImage(dependencies, report, retry++))
-              } catch (error) {
-                consola.error(error)
-                reject(error)
-              }
-            }, 1000)
-          }
-          else if(data.status === 'prepared') {
-            return resolve(data)
-          }
-          reject(data)
-        })
-        .catch(reject)
-    }
-    )
-
+        reject(data)
+      })
+      .catch(reject)
+  }
+  )
 
 async function getReport(path: string): Promise<Report['1.0']> {
   const reportFile = 'tmp_report.json';
@@ -104,7 +85,7 @@ async function getReport(path: string): Promise<Report['1.0']> {
     containerName : 'analyser-cli-'+Date.now(),
     image: 'bitship/analyser-cli',
     platform: 'linux/amd64',
-    detouched: false,
+    detouched: true,
     script: 'node /analyser-cli/index.mjs',
     volumes: [
       `${path}:/app`
@@ -151,6 +132,7 @@ async function manualValidation(report: AnalyserReport, tools: any): Promise<Man
     // @ts-ignore
     consola.log(`${key} -> ${report.dependencies[key].version}`)
   })
+  consola.info('You can find more at https://www.bit-ship.dev/tools');
 
   const options = Object.keys(tools).map((tool) =>
     ({label: tools[tool].label, value: tool, hint: tools[tool].description})
