@@ -7,6 +7,7 @@ import {useConfig} from '../../services/config';
 import {useContainer} from '../../services/container';
 import {ClientConfig} from '../../services/config.d'
 import {useEnvironment} from '../../services/environment';
+import chalk from 'chalk';
 
 
 const {setConfig} = useConfig();
@@ -15,7 +16,7 @@ const {apiURL} = useEnvironment()
 
 type AnalyserReport  = Report['1.0']
 
-
+let status = 'queued';
 export default defineCommand({
   meta: {
     name: 'analyse',
@@ -35,24 +36,29 @@ export default defineCommand({
     const {dependencies, tasks} = await manualValidation(report, tools)
 
 
+    consola.log('Preparing image');
+    const interval = loader()
     try {
-      consola.start('Image build requested');
-      const {imageName} = await getImage({
+      const {name} = await getImage({
         version: report.version,
         dependencies
       }, 0)
+      clearInterval(interval)
       consola.start('Generating initial bit-ship.yml config');
       await setConfig({
         version: '1.0',
         images: {
-          default: imageName
+          default: name
         },
         dependencies,
         tasks
       });
+      clearInterval(interval)
       consola.success('Analysis completed');
     } catch (error) {
+      clearInterval(interval)
       consola.error('Failed to prepare image')
+      consola.error('Please report this issue to https://discord.com/channels/1260997714049630268/1325444528546643979' )
       console.log(error)
     }
   },
@@ -62,11 +68,11 @@ const getImage = (report: any, retry: number) =>
   new Promise<any>((resolve, reject) => {
     ofetch(`${apiURL}/public/v1/image`, {method: 'POST', body: {report}})
       .then((data) => {
-        if(data.state === 'prepared') {
+        if(data.status === 'finished') {
           consola.success('Image is ready')
           return resolve(data)
-        } else if((data.state === 'queued' || data.state === 'building') && retry < 200) {
-          process.stdout.write(`\rimage status: ${data.state}`)
+        } else if((data.status === 'queued' || data.status === 'running') && retry < 200) {
+          status = data.status === 'running' ? 'building' : 'queued';
           return setTimeout(() => {
             getImage(report, retry++).then(resolve).catch(reject)
           }, 2000)
@@ -74,8 +80,7 @@ const getImage = (report: any, retry: number) =>
         reject(data)
       })
       .catch(reject)
-  }
-  )
+  })
 
 async function getReport(path: string): Promise<Report['1.0']> {
   const reportFile = 'tmp_report.json';
@@ -147,7 +152,7 @@ async function manualValidation(report: AnalyserReport, tools: any): Promise<Man
   // @ts-ignore
   const pickedDeps = pickedTools.reduce((acc, key: string) => {
     // @ts-ignore
-    acc[key] = tools[key].versions.latest
+    acc[key] = tools[key].latestVersion
     return acc
   }, {})
 
@@ -170,6 +175,13 @@ async function manualValidation(report: AnalyserReport, tools: any): Promise<Man
 }
 
 
+const P = ['◐', '◓', '◑', '◒'];
+let x = 0;
+const loader = () => setInterval(() => {
+  process.stdout.write(chalk.magenta(`\r${P[x++]} Current status ${status}`));
+  x &= 3;
+}, 250);
+
 async function fetchTools()    {
   const tools = await ofetch(`${apiURL}/public/v1/tools`)
   return tools
@@ -183,3 +195,4 @@ type ManualOutput =  {
   tasks: ClientConfig['tasks']
   dependencies: ClientConfig['dependencies']
 }
+
