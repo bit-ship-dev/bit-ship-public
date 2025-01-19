@@ -7,6 +7,7 @@
 - feature: add package json metadata 
 - feature: call API to get image from report
 - refactor: bundle dependencies in instead of using external ones
+- refactor: rename analyse command with init
 
 ## 0.0.2 (2024-12-16)
 - test new release
