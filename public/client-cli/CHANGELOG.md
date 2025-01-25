@@ -1,3 +1,8 @@
+## 0.1.1 (2025-1-25)
+- fix: exec and run
+- refactor: moce bit-ship config to dedicated folder
+- refactor: change config structure
+
 ## 0.1.0 (2025-1-2)
 - fix: API point to prod URL
 - fix: reset setting

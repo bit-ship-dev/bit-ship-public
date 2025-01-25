@@ -20,7 +20,12 @@ interface Config_1_0 {
 
   // Image for tasks and scripts
   images: {
-    [imageName: 'default' | string] : string
+    [imageName: 'default' | string] : {
+      name: string,
+      dependencies?: {
+        [key in ToolsNames]?: string
+      }
+    }
   }
 
   tasks: {
@@ -34,10 +39,6 @@ interface Config_1_0 {
       ports?: string[]
       volumes?: string[]
     }
-  }
-
-  dependencies: {
-    [key in ToolsNames]?: string
   }
 
   volumes: {}

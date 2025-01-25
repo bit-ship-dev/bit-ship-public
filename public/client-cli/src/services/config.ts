@@ -1,11 +1,11 @@
 import {parseYAML, stringifyYAML} from 'confbox';
-import {readFile} from 'fs/promises';
+import {readFile, mkdir} from 'fs/promises';
 import {writeFile} from 'unstorage/drivers/utils/node-fs';
 import {ClientConfig} from './config.d'
 import type {Config as ConfigType} from '@bit-ship/types/types/config'
 import consola from 'consola';
 
-const path = '.'
+const path = '.bit-ship'
 // eslint-disable-next-line
 let config: Config | {} = {}
 
@@ -21,8 +21,9 @@ export const useConfig = () => ({
   loadConfig
 })
 
-function setConfig(newConfig: ClientConfig){
+async function setConfig(newConfig: ClientConfig){
   config = newConfig;
+  await mkdir('path', { recursive: true });
   writeFile(`${path}/bit-ship.yml`, stringifyYAML(newConfig));
 }
 

@@ -48,9 +48,11 @@ export default defineCommand({
       await setConfig({
         version: '1.0',
         images: {
-          default: name
+          default: {
+            name,
+            dependencies,
+          }
         },
-        dependencies,
         tasks
       });
       clearInterval(interval)

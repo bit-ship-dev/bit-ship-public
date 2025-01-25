@@ -6,8 +6,7 @@ import {useConfig} from '../../services/config';
 
 const {runContainer} = useContainer();
 const containerName = 'test';
-const image = 'node:22-alpine'
-const {getConfigPath} = useConfig();
+const {getConfig} = useConfig();
 
 
 export const run = defineCommand({
@@ -25,13 +24,20 @@ export const run = defineCommand({
 
   run({args}) {
     const taskName = args.task;
-    const task = getConfigPath(['tasks', taskName], undefined);
+    const config =getConfig()
+    // @ts-ignore
+    const task = config?.tasks[taskName];
     // @ts-ignore
     const script = task?.script || '';
     if (!task || !script) {
       return consola.error(`Task '${taskName}' not found`);
     }
-    const image = getConfigPath(['tasks', taskName, 'image'], '') || getConfigPath(['config', 'images', 'default'], '')
+
+    const taskImage = task.image || 'default';
+    // @ts-ignore
+    const image = config.images[taskImage]?.name;
+
+
     if (!image) {
       return consola.error(`No image found for task '${task}'`);
     }
@@ -39,8 +45,6 @@ export const run = defineCommand({
     runContainer({containerName, image, script});
   },
 });
-
-
 
 
 export const exec=  defineCommand({
@@ -58,15 +62,17 @@ export const exec=  defineCommand({
       type: 'string',
       required: false,
       description: 'Image to use',
-      default: getConfigPath(['images', 'default'], '')
+      default: 'default'
     }
   },
   async run({args}) {
     if(!args.image) {
       return consola.error('No image was provided and default image was not found');
     }
+    const config = getConfig()
     const script = args.script;
-    await runContainer({containerName, image, script});
+    const imageName = config.images[args.image].name
+    await runContainer({containerName, image: imageName, script});
   },
 });
 
