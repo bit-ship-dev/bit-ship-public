@@ -37,12 +37,11 @@ export const run = defineCommand({
     // @ts-ignore
     const image = config.images[taskImage]?.name;
 
-
     if (!image) {
       return consola.error(`No image found for task '${task}'`);
     }
     consola.start('Running task')
-    runContainer({containerName, image, script});
+    runContainer({containerName, image, script, volumes: ['./:/app']});
   },
 });
 
@@ -72,7 +71,7 @@ export const exec=  defineCommand({
     const config = getConfig()
     const script = args.script;
     const imageName = config.images[args.image].name
-    await runContainer({containerName, image: imageName, script});
+    await runContainer({containerName, image: imageName, script, volumes: ['./:/app']});
   },
 });
 

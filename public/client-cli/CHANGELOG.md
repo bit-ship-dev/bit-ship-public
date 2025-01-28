@@ -1,3 +1,6 @@
+## 0.1.1 (2025-1-28)
+- fix: add volume for run and exec command 
+
 ## 0.1.1 (2025-1-25)
 - fix: exec and run
 - refactor: moce bit-ship config to dedicated folder
