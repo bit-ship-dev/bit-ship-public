@@ -9,7 +9,7 @@ async function init(){
   const version = await readVersion()
   await setupStorage();
   setupConsola();
-  setupAnalytics();
+  await setupAnalytics();
   setupConfig();
 
   const main = defineCommand({
