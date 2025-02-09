@@ -1,3 +1,6 @@
+## 0.1.2 (2025-2-10)
+- fix: daily activity ping
+
 ## 0.1.1 (2025-1-28)
 - fix: add volume for run and exec command 
 
