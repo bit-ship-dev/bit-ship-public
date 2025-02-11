@@ -12,7 +12,7 @@ export const setupAnalytics = async () => {
     const storage = useStorage()
     let date: string = await storage.getItem('lastUsageDate')
     let uuid = await storage.getItem('uuid')
-    if (!date || !uuid) {
+    if (!uuid) {
       uuid = uuidv4();
       storage.setItem('uuid', uuid);
       capture('install', {uuid});
@@ -20,7 +20,7 @@ export const setupAnalytics = async () => {
       await storage.setItem('lastUsageDate', date)
     }
     // @ts-ignore
-    else if (!isToday(date)) {
+    if (!isToday(date)) {
       capture('usage-ping', {uuid: uuid})
     }
   } catch (err) {

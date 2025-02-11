@@ -40,7 +40,6 @@ export const run = defineCommand({
     if (!image) {
       return consola.error(`No image found for task '${task}'`);
     }
-    consola.start('Running task')
     runContainer({containerName, image, script, volumes: ['./:/app']});
   },
 });

@@ -1,3 +1,6 @@
+## 0.1.3 (2025-2-10)
+- fix: get rid of redundant log
+- fix: daily activity ping
 ## 0.1.2 (2025-2-10)
 - fix: daily activity ping
 
