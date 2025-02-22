@@ -6,7 +6,7 @@ import {ClientConfig} from '../../services/config.d'
 import {exec} from 'child_process'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import {readFile} from 'fs/promises';
+import {readFile, unlink} from 'fs/promises';
 import {useImage} from '../../services/images';
 
 
@@ -69,7 +69,10 @@ async function getReport(): Promise<Report['1.0']> {
         return consola.error('Analysis failed', error);
       }
       readFile(reportPath, 'utf-8')
-        .then((data) => resolve(JSON.parse(data)))
+        .then((data) => {
+          unlink(reportPath)
+          resolve(JSON.parse(data))
+        })
     })
   })
 }

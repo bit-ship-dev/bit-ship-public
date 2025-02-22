@@ -25,7 +25,7 @@ async function setConfig(newConfig: ClientConfig){
   consola.start('Updating bit-ship.yml');
   config = {...config, ...newConfig};
   await mkdir('path', { recursive: true });
-  writeFile(`${path}/bit-ship.yml`, stringifyYAML(newConfig));
+  writeFile(`${path}/bit-ship.yml`, stringifyYAML(config));
 }
 
 async function loadConfig (){

@@ -1,3 +1,8 @@
+## 0.2.1 (2025-2-23)
+- fix: unlink tmp_report.json 
+- fix: extend existing config instead of rewriting it
+- fix: analysis dependency summary
+
 ## 0.2.0 (2025-2-22)
 - feature: create image command
 - feature: pick version while building image

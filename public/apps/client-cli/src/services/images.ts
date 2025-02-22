@@ -17,7 +17,7 @@ async function create(dependencies = {} ){
     consola.info('Dependencies found in your project');
     Object.keys(dependencies).forEach((key) => {
       // @ts-ignore
-      consola.log(`${key} -> ${dependencies[key].version}`)
+      consola.log(`${key} -> ${dependencies[key]}`)
     })
     editImage = !(await consola.prompt('Are dependencies correct?', {type: 'confirm'}))
     if (editImage) {
