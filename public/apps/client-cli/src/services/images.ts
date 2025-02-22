@@ -1,7 +1,7 @@
-import {ofetch} from "ofetch";
-import consola from "consola";
-import {loader} from "../utils/cli";
-import {useEnvironment} from "./environment";
+import {ofetch} from 'ofetch';
+import consola from 'consola';
+import {loader} from '../utils/cli';
+import {useEnvironment} from './environment';
 
 const {apiURL} = useEnvironment()
 
@@ -85,7 +85,7 @@ const getImage = (dependencies: any, retry: number, updateStatus: any) =>
 
           updateStatus(data.status === 'running' ? 'building' : 'queued')
           return setTimeout(() => {
-            getImage(report, retry++, updateStatus).then(resolve).catch(reject)
+            getImage(dependencies, retry++, updateStatus).then(resolve).catch(reject)
           }, 2000)
         }
         reject(data)

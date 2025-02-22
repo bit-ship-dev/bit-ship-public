@@ -20,9 +20,7 @@ interface Report_1_0 {
 
   // Dependencies to install
   dependencies: {
-    [key in ToolsNames]?: {
-      version: string
-    }
+    [key in ToolsNames]?: string
   }
 
   // Scripts analysis
