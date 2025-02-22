@@ -38,7 +38,7 @@ export default defineCommand({
     } catch (error) {
       consola.error('Error')
       consola.error('Please report this issue to https://discord.com/channels/1260997714049630268/1325444528546643979' )
-      console.log(error)
+      consola.log(error)
     }
   },
 });
