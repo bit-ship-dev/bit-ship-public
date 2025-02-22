@@ -30,7 +30,6 @@ async function init(){
 }
 init()
 
-
 async function readVersion(): Promise<string> {
   const packageJsonSTR = await readFile('./package.json', 'utf8');
   const packageJson = JSON.parse(packageJsonSTR);
