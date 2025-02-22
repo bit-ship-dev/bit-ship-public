@@ -22,7 +22,8 @@ export const useConfig = () => ({
 })
 
 async function setConfig(newConfig: ClientConfig){
-  config = newConfig;
+  consola.start('Updating bit-ship.yml');
+  config = {...config, ...newConfig};
   await mkdir('path', { recursive: true });
   writeFile(`${path}/bit-ship.yml`, stringifyYAML(newConfig));
 }
@@ -37,11 +38,7 @@ async function loadConfig (){
   }
 }
 
-
-
 export type Config = ConfigType['1.0']
-
-
 
 function get<T, K extends keyof T>(
   object: T,

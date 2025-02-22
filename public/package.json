@@ -5,11 +5,7 @@
     "build": "turbo run build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "lint:fix": "turbo lint -- --fix",
-    "publish-nightly": "turbo publish-nightly",
-    "start:analyser-cli": "node ./apps/client-cli/bin/bin.js",
-    "start:client-cli": "pnpm start --filter bit-ship",
-    "start:dependency-sandbox": "pnpm sandbox --filter @repo/dependencies"
+    "lint:fix": "turbo lint -- --fix"
   },
   "engines": {
     "node": ">=22"

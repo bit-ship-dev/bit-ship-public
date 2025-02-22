@@ -1,6 +1,14 @@
+## 0.2.0 (2025-2-22)
+- feature: create image command
+- feature: pick version while building image
+- feature: editing image after analysis
+- refactor: bake in analyser cli
+- refactor: get image api endpoint
+
 ## 0.1.3 (2025-2-10)
 - fix: get rid of redundant log
 - fix: daily activity ping
+
 ## 0.1.2 (2025-2-10)
 - fix: daily activity ping
 

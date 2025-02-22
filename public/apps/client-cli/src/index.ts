@@ -20,6 +20,7 @@ async function init(){
     },
     subCommands: {
       init: () => import('./modules/init/init').then((r) => r.default),
+      image: () => import('./modules/image/image').then((r) => r.default),
       run:() => import('./modules/run/run').then((r) => r.run),
       exec:() => import('./modules/run/run').then((r) => r.exec),
       settings:() => import('./modules/settings/settings').then((r) => r.default),
