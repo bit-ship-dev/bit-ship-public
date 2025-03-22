@@ -1,3 +1,9 @@
+## 0.3.0 (2025-2-23)
+- feature: run command can execute jobs
+- feature: log storage
+- feature: git hook for jobs
+- feature: config validation
+
 ## 0.2.1 (2025-2-23)
 - fix: unlink tmp_report.json 
 - fix: extend existing config instead of rewriting it

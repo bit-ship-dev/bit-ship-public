@@ -4,13 +4,15 @@ import {setupConfig} from './services/config';
 import {setupStorage} from './services/storage';
 import {setupAnalytics} from './services/analytics';
 import {readFile} from 'fs/promises'
+import {setupHook} from './modules/run/services/hook';
 
 async function init(){
   const version = await readVersion()
   await setupStorage();
   setupConsola();
   await setupAnalytics();
-  setupConfig();
+  await setupConfig();
+  await setupHook()
 
   const main = defineCommand({
     meta: {
@@ -23,6 +25,7 @@ async function init(){
       image: () => import('./modules/image/image').then((r) => r.default),
       run:() => import('./modules/run/run').then((r) => r.run),
       exec:() => import('./modules/run/run').then((r) => r.exec),
+      hook:() => import('./modules/run/run').then((r) => r.hook),
       settings:() => import('./modules/settings/settings').then((r) => r.default),
     }
   });

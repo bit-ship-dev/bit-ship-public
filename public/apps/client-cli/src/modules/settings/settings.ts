@@ -9,11 +9,6 @@ export default defineCommand({
     description: 'Configure bit-ship cli'
   },
   args: {
-    section: {
-      description: 'Analytics',
-      type: 'positional',
-      required: false,
-    },
   },
   async run() {
     const storage = useStorage()

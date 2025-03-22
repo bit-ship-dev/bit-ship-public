@@ -1,7 +1,7 @@
 import {spawn} from 'child_process';
 import consola from 'consola';
-// import chalk from "chalk";
-
+import {writeFile} from 'fs/promises';
+import fs from 'fs';
 
 export const useContainer = () => ({
   runContainer
@@ -23,21 +23,34 @@ const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
   // eslint-disable-next-line sonarjs/no-os-command-from-path
   const process = spawn('docker', args);
 
+  let logContent = ''
   const log = opts.detouched ?
-    (_output: any) => {} :
-    (output: any, type: 'log' | 'error' | 'success' | 'start') => {
+    (output: any, _type: string, store = true) => {if (store){logContent += '\n' + output}} :
+    (output: any, type: 'log' | 'error' | 'success' | 'start', store = true) => {
+      if (store) {
+        logContent += '\n' + output
+      }
       consola[type](output)
     }
 
-  log('-------------------------- Running task', 'start')
+  log('-------------------------- Running task', 'start', false)
   process.stdout.on('data', (data: any) => log(`${data}`, 'log'));
   process.stderr.on('data', (data: any) => log(`${data}`,'log'));
   process.on('close', (code: any) => {
     resolve(true)
-    log(`--------------------------/ Task finished code: ${code}`, 'success')
+    log(`--------------------------/ Task finished code: ${code}`, 'success', false)
   });
-})
 
+  if(opts.storeLogs) {
+    const date = new Date()
+    const prefix = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}_${date.getHours()}-${date.getMinutes()}`
+    const path = '.bit-ship/logs'
+    if(!fs.existsSync(path)){
+      fs.mkdirSync(path, { recursive: true });
+    }
+    writeFile(`${path}/${prefix}_${opts.taskName}.log`, logContent)
+  }
+})
 
 
 function formatEnv(env: any) {
@@ -47,10 +60,12 @@ function formatEnv(env: any) {
 interface RunOptions {
   containerName: string;
   image: string;
+  storeLogs?: boolean;
   script: string;
   platform?: string;
   detouched?: boolean;
   ports?: string[];
+  taskName?: string;
   volumes?: string[];
   env?: {
     [key: string]: string

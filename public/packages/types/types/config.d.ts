@@ -1,4 +1,8 @@
 import {ToolsNames} from "./shared";
+import type {Job} from './config/job'
+import type {App} from './config/app'
+import type {Task} from './config/task'
+import type {Image} from './config/image'
 
 // Config is store in bit-ship.yml file
 // It contains all necessary information to use bit-ship in the project
@@ -20,27 +24,24 @@ interface Config_1_0 {
 
   // Image for tasks and scripts
   images: {
-    [imageName: 'default' | string] : {
-      name: string,
-      dependencies?: {
-        [key in ToolsNames]?: string
-      }
-    }
+    [imageName: string] : Image
   }
 
-  tasks: {
-    [key: string]: {
-      script: string,
-      localURL?: string,
-      location?: string,
-      env? : {
-        [key: string]: string
-      }
-      ports?: string[]
-      volumes?: string[]
-    }
+  vaults?: {
   }
 
+  tasks?: {
+    [key: string]: Task
+  }
+
+  jobs?: {
+    [jobName: string]: Job
+  }
+
+  apps?: {
+    [appName: string]: App
+  }
 
   volumes: {}
 }
+

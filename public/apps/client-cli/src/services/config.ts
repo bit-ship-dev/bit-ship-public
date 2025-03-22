@@ -4,6 +4,7 @@ import {writeFile} from 'unstorage/drivers/utils/node-fs';
 import {ClientConfig} from './config.d'
 import type {Config as ConfigType} from '@bit-ship/types/types/config'
 import consola from 'consola';
+import Joi from 'joi';
 
 const path = '.bit-ship'
 // eslint-disable-next-line
@@ -31,6 +32,11 @@ async function setConfig(newConfig: ClientConfig){
 async function loadConfig (){
   try {
     const configStr = await readFile(`${path}/bit-ship.yml`, 'utf8');
+    const result = Config.validate(config)
+    if(result.error) {
+      consola.error('Invalid bit-ship.yml file', result.error)
+      return
+    }
     config = parseYAML(configStr);
   // eslint-disable-next-line sonarjs/no-ignored-exceptions
   } catch (_err: any) {
@@ -58,3 +64,39 @@ function get<T, K extends keyof T>(
   // Return the result or the default value if result is undefined
   return result === undefined ? defaultValue : result;
 }
+
+
+// ==================================== Validators
+
+
+const Job = Joi.object({
+  on: Joi.object({
+    commit: Joi.object({
+      on: Joi.string().valid('pre-commit', 'post-commit')
+    })
+  }).required(),
+  tasks: Joi.array().items(Joi.string()).required(),
+})
+
+const Task = Joi.object({
+  script: Joi.string().required(),
+  location: Joi.string().optional(),
+  env: Joi.object().optional(),
+  volumes: Joi.array().items(Joi.string()).optional(),
+}).optional()
+
+const Image = Joi.object({
+  name: Joi.string().required(),
+  dependencies: Joi.object().optional(),
+}).optional()
+
+const Config = Joi.object({
+  version: Joi.string().optional(),
+  name: Joi.string().optional(),
+  images: Joi.object({}).pattern(Joi.string(), Image).optional(),
+  tasks: Joi.object({}).pattern(Joi.string(), Task).optional(),
+  jobs: Joi.object().pattern(Joi.string(), Job).optional(),
+  // vaults: Joi.object().optional(),
+  // apps: Joi.object().optional(),
+  // volumes: Joi.object().optional(),
+})
