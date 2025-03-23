@@ -41,7 +41,6 @@ async function readVersion(): Promise<string> {
   const __dirname = dirname(__filename);
   // relative path from this file
   const packageJsonSTR = await readFile(path.join(__dirname, '..', 'package.json'), 'utf8');
-  console.log(packageJsonSTR)
   const packageJson = JSON.parse(packageJsonSTR);
   return packageJson.version || '0.0.0'
 }

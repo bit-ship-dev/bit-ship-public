@@ -79,7 +79,6 @@ export const hook = defineCommand({
     }
   },
   async run({args}) {
-    console.log(args.name)
     const config = getConfig()
 
     // @ts-ignore
@@ -88,10 +87,9 @@ export const hook = defineCommand({
     }
 
     // @ts-ignore
-    for(const job in Object.keys(config.jobs)) {
-
+    for(const job in config.jobs) {
       // @ts-ignore
-      if(config.jobs[job]?.on?.commit.on && config.jobs[job]?.on?.commit.on === args.name) {
+      if(config.jobs[job]?.on?.commit?.on === args.name) {
         // @ts-ignore
         run.run({args: {task: job}})
       }

@@ -32,12 +32,12 @@ async function setConfig(newConfig: ClientConfig){
 async function loadConfig (){
   try {
     const configStr = await readFile(`${path}/bit-ship.yml`, 'utf8');
+    config = parseYAML(configStr);
     const result = Config.validate(config)
     if(result.error) {
       consola.error('Invalid bit-ship.yml file', result.error)
       return
     }
-    config = parseYAML(configStr);
   // eslint-disable-next-line sonarjs/no-ignored-exceptions
   } catch (_err: any) {
     consola.warn('No bit-ship.yml file found. Create it with analyse command');
