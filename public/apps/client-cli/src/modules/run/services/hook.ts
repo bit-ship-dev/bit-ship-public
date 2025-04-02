@@ -1,7 +1,6 @@
 import fs from 'fs'
 import {writeFile} from 'fs/promises'
 import {useConfig} from '../../../services/config';
-import consola from 'consola';
 
 export const setupHook = async () => {
   const config = useConfig().getConfig()

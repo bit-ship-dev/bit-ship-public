@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 import {readFile} from 'fs/promises'
 import { dirname } from 'path';
 import {setupHook} from './modules/run/services/hook';
-import * as path from "node:path";
+import * as path from 'node:path';
 
 async function init(){
   const version = await readVersion()
