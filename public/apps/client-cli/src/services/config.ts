@@ -12,6 +12,7 @@ let config: Config | {} = {}
 
 export const setupConfig = async() => {
   await loadConfig()
+  // TODO update global hosts and proxy data
 }
 
 
@@ -29,22 +30,27 @@ async function setConfig(newConfig: ClientConfig){
   writeFile(`${path}/bit-ship.yml`, stringifyYAML(config));
 }
 
-async function loadConfig (){
+async function loadConfig(){
   try {
     const configStr = await readFile(`${path}/bit-ship.yml`, 'utf8');
     config = parseYAML(configStr);
     const result = Config.validate(config)
+
     if(result.error) {
       consola.error('Invalid bit-ship.yml file', result.error)
       return
     }
-  // eslint-disable-next-line sonarjs/no-ignored-exceptions
+    // eslint-disable-next-line sonarjs/no-ignored-exceptions
   } catch (_err: any) {
-    consola.warn('No bit-ship.yml file found. Create it with analyse command');
+    consola.warn('No bit-ship.yml file found. You can create it manually or run `bit-ship init` to create a default one.');
   }
 }
 
 export type Config = ConfigType['1.0']
+
+
+
+// ==================================== Helper
 
 function get<T, K extends keyof T>(
   object: T,
@@ -67,14 +73,12 @@ function get<T, K extends keyof T>(
 
 
 // ==================================== Validators
-
-
 const Job = Joi.object({
   on: Joi.object({
     commit: Joi.object({
       on: Joi.string().valid('pre-commit', 'post-commit')
     })
-  }).required(),
+  }),
   tasks: Joi.array().items(Joi.string()).required(),
 })
 
@@ -90,13 +94,24 @@ const Image = Joi.object({
   dependencies: Joi.object().optional(),
 }).optional()
 
+const App = Joi.object({
+  expose: Joi.array().items(
+    Joi.object({
+      localHost: Joi.string().optional(),
+      port: Joi.number(),
+      access: Joi.string().valid('public', 'proxy-public', 'internal')
+    })
+  ).optional(),
+  task: Joi.string().required(),
+}).optional()
+
 const Config = Joi.object({
   version: Joi.string().optional(),
   name: Joi.string().optional(),
   images: Joi.object({}).pattern(Joi.string(), Image).optional(),
   tasks: Joi.object({}).pattern(Joi.string(), Task).optional(),
   jobs: Joi.object().pattern(Joi.string(), Job).optional(),
+  apps: Joi.object().pattern(Joi.string(), App).optional(),
   // vaults: Joi.object().optional(),
-  // apps: Joi.object().optional(),
   // volumes: Joi.object().optional(),
 })

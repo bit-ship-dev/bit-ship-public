@@ -22,9 +22,7 @@ export default defineCommand({
       async run() {
         console.log('Creating image')
         const name = await consola.prompt('Name of the image', {type: 'text', required: true})
-
         const image = await create({})
-
         setConfig({images: {[name]: image}})
       }
     },

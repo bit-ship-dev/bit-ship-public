@@ -1,4 +1,3 @@
-import {ToolsNames} from "./shared";
 import type {Job} from './config/job'
 import type {App} from './config/app'
 import type {Task} from './config/task'
@@ -9,11 +8,9 @@ import type {Image} from './config/image'
 // It derived from report with some additional information from user.
 // Then it can be modified by user
 
-
 export interface Config {
   '1.0': Config_1_0
 }
-
 
 interface Config_1_0 {
   // Report version
@@ -27,8 +24,7 @@ interface Config_1_0 {
     [imageName: string] : Image
   }
 
-  vaults?: {
-  }
+  vaults?: {}
 
   tasks?: {
     [key: string]: Task
@@ -42,6 +38,6 @@ interface Config_1_0 {
     [appName: string]: App
   }
 
-  volumes: {}
+  // volumes: {}
 }
 

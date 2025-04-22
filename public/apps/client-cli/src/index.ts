@@ -8,10 +8,11 @@ import {readFile} from 'fs/promises'
 import { dirname } from 'path';
 import {setupHook} from './modules/run/services/hook';
 import * as path from 'node:path';
+import {restartDemon} from './modules/demon/demon';
 
 async function init(){
   const version = await readVersion()
-  await setupStorage();
+  await setupStorage(restartDemon);
   setupConsola();
   await setupAnalytics();
   await setupConfig();
@@ -21,14 +22,15 @@ async function init(){
     meta: {
       name: 'bit-ship',
       version,
-      description: 'Bit-Ship CLI https://bit-ship.dev/',
+      description: 'Bit-Ship CLI https://www.bit-ship.dev',
     },
     subCommands: {
       init: () => import('./modules/init/init').then((r) => r.default),
+      demon: () => import('./modules/demon/demon').then((r) => r.default),
       image: () => import('./modules/image/image').then((r) => r.default),
       run:() => import('./modules/run/run').then((r) => r.run),
-      exec:() => import('./modules/run/run').then((r) => r.exec),
-      hook:() => import('./modules/run/run').then((r) => r.hook),
+      exec:() => import('./modules/run/exec').then((r) => r.exec),
+      hook:() => import('./modules/run/hook').then((r) => r.hook),
       settings:() => import('./modules/settings/settings').then((r) => r.default),
     }
   });

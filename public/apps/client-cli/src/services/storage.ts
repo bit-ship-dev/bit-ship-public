@@ -8,10 +8,20 @@ import os from 'os';
 const homeDir = os.homedir();
 let storage! : Storage
 
-export const setupStorage = async () => {
+export const setupStorage = async (restartDemon: () => Promise<any>) => {
   storage = await createStorage({
     driver: fsDriver({ base: `${homeDir}/.bit-ship/data` }),
   });
+
+  let projects = await storage.getItem('projects')
+  if(!projects) {
+    projects = {}
+  }
+  if (!projects[process.cwd()]) {
+    projects[process.cwd()] = ''+Date.now()
+    await storage.setItem('projects', projects)
+    restartDemon()
+  }
 }
 
 export const useStorage = (): Storage => {
@@ -20,7 +30,3 @@ export const useStorage = (): Storage => {
   }
   return storage
 }
-
-
-
-

@@ -2,159 +2,104 @@ import consola from 'consola';
 import {defineCommand} from 'citty';
 import {useContainer} from '../../services/container';
 import {useConfig} from '../../services/config';
-
+import {type ClientConfig} from '../../services/config.d';
+import type {Handlers, ParsedName, Categories} from './run.d'
 
 const {runContainer} = useContainer();
-const containerName = 'test';
 const {getConfig} = useConfig();
 
+
+const handlers: Handlers = {
+  apps: handleApp,
+  jobs: handleJob,
+  tasks: handleTask,
+}
 
 export const run = defineCommand({
   meta: {
     name: 'run',
-    description: 'Run your tasks and jobs'
-  },
-  args: {
-    task: {
-      description: 'Name of the task or job',
-      type: 'positional',
-      required: true,
-    },
-  },
-  run({args}) {
-    const name = args.task;
-    const taskExec = handleTask(name)
-    if (taskExec) {
-      return taskExec();
-    }
-    const jobExec = handleJob(name)
-    if (jobExec){
-      jobExec()
-    }
-  },
-});
-
-
-export const exec = defineCommand({
-  meta: {
-    name: 'exec',
-    description: 'Execute a script',
-  },
-  args: {
-    script: {
-      description: 'script to execute',
-      type: 'positional',
-      required: true,
-    },
-    image: {
-      type: 'string',
-      required: false,
-      description: 'Image to use',
-      default: 'default'
-    }
-  },
-  async run({args}) {
-    if(!args.image) {
-      return consola.error('No image was provided and default image was not found');
-    }
-    const config = getConfig()
-    const script = args.script;
-    const imageName = config.images[args.image].name
-    await runContainer({containerName, image: imageName, script, volumes: ['./:/app']});
-  },
-});
-
-
-
-export const hook = defineCommand({
-  meta: {
-    name: 'hook',
-    description: 'Internal command used as entry point for the hooks',
+    description: 'Run tasks, jobs and apps',
   },
   args: {
     name: {
-      type: 'string',
-      description: 'hook ',
+      description: 'Name of tasks, jobs and apps',
+      type: 'positional',
       required: true,
-    }
+    },
   },
   async run({args}) {
+    const rawName = args.name;
     const config = getConfig()
-
-    // @ts-ignore
-    if(!config.jobs) {
-      return
+    const {category, names} = resolveRawName(rawName, config)
+    if (!config) {
+      return consola.log('No config found');
     }
-
-    // @ts-ignore
-    for(const job in config.jobs) {
-      // @ts-ignore
-      if(config.jobs[job]?.on?.commit?.on === args.name) {
-        // @ts-ignore
-        run.run({args: {task: job}})
-      }
+    if (!category || !names.length) {
+      return consola.error(`No task, job or app found with name '${rawName}'`);
     }
+    await Promise.all(names.map((name) => handlers[category](name, config)))
 
   },
 });
 
-
-
-function handleJob(jobName: string): Handler | undefined {
-  const config = getConfig()
-  const job = config?.jobs[jobName];
-  const task = job.tasks
-
-  if (!job ) {
-    consola.error(`Job '${jobName}' not found`);
-    return
-  }
-
-  const handlers = task.reduce((acc: any[], taskName: string) => {
-    const exec = handleTask(taskName)
-    if (exec) {
-      acc.push(exec)
-    }
-    return acc
-  }, [])
-
-  if (!handlers.length) {
-    consola.error('Job does not include any valid tasks');
-    return
-  }
-
-  return () => {
-    consola.log(`Running job ${jobName} with ${task.length} tasks`)
-    handlers.forEach((handler: Handler) => handler())
-  }
-
+async function handleJob(name: string, config: ClientConfig) {
+  const handlers = config.jobs[name].tasks.map((val: string | string[]) =>
+    () => {
+      if(!Array.isArray(val)) {
+        return handleTask(val, config)
+      }
+      return Promise.all(val.map((taskName: string) => handleTask(taskName, config)))
+    }, [])
+  handlers.forEach((handler) => handler())
 }
 
+async function handleApp(name: string, config: ClientConfig) {
+  const {expose, task} = config.apps[name];
+  const containerName = `bit-app-${name}`
+  const ports: string[]  = []
+  if(expose) {
+    expose.map((exp) => {
+      if (exp.access === 'public' && exp.port) {
+        ports.push(`${exp.port}:${exp.port}`)
+      }
+    })
+  }
+  handleTask(task, config, {containerName, ports})
+}
 
-
-function handleTask(taskName: string): Handler | undefined {
-  const config = getConfig()
+async function handleTask(taskName: string, config: ClientConfig, runOptions?: any) {
   const task = config?.tasks[taskName];
-  // @ts-ignore
-  const script = task?.script || '';
-
   if (!task) {
-    return
+    throw 'No task found for name: ' + taskName
   }
-  const taskImage = task.image || 'default';
-  // @ts-ignore
-  const image = config.images[taskImage]?.name;
-
+  const image = config?.images?.[task?.image || 'default']?.name
   if (!image) {
-    return consola.error(`No image found for task '${task}'`);
+    throw 'No image found for name: ' + taskName
   }
-
-  return () => {
-    runContainer({taskName,containerName, image, script, volumes: ['./:/app'], storeLogs: true});
-  }
-
+  const containerName = `bit-${taskName}-${Date.now()}`
+  runContainer({remove: true, taskName, containerName, image, script: task.script, volumes: ['./:/app'], storeLogs: true, ...runOptions});
 }
 
 
+// ================================> Helpers
+const resolveRawName = (rawName: string, config: ClientConfig): ParsedName => {
+  const categories: Categories[]  = ['jobs', 'apps', 'tasks']
+  const  category =
+    // Prefix Match
+    categories.find((category) =>
+      rawName.startsWith(`${category}:`) && config[category][rawName.replace(`${category}:`, '')]) ||
+    //Item Match
+    categories.find((category) => config?.[category]?.[rawName])
+  const wildCardCategory = categories.find((cat) => cat === rawName)
 
-type Handler = () => void
+  let names: string[] = []
+  if (category) {
+    names.push(rawName.replace(category+':', ''))
+  } else if (wildCardCategory) {
+    names = Object.keys(config[wildCardCategory])
+  }
+
+  return  { names, category: category || wildCardCategory }
+}
+
+

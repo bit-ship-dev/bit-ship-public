@@ -1,4 +1,11 @@
-## 0.3.0 (2025-2-23)
+## 0.4.0 (2025-4-18)
+- feature: new App primitive 
+- feature: run command can run apps
+- feature: new command to stoping apps
+- feature: new commands to control bit-ship demon 
+- feature: bit-ship demon that runs in background and serves as reverse proxy
+
+## 0.3.0 (2025-3-23)
 - feature: run command can execute jobs
 - feature: log storage
 - feature: git hook for jobs

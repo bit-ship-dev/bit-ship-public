@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./bin/bin.js",
     "dev": "rollup --watch",
-    "build": "rollup --config ../../packages/rollup/configs/cli.js && cp ../../packages/analyser-cli/dist/index.mjs ./dist/analyser-cli.js",
+    "build": "rollup --config ../../packages/rollup/configs/cli.js && cp ../../packages/analyser-cli/dist/index.mjs ./dist/analyser-cli.js && cp ../../packages/demon/dist/index.mjs ./dist/demon.mjs",
     "lint": "eslint --config ../../packages/eslint/configs/base.js ./src",
     "nightly": "node ./cli/nightly.mjs",
     "typecheck": "tsc --noEmit",
