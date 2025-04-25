@@ -85,7 +85,7 @@ const Job = Joi.object({
 const Task = Joi.object({
   script: Joi.string().required(),
   location: Joi.string().optional(),
-  env: Joi.object().optional(),
+  env: Joi.object().pattern(Joi.string(), Joi.string()).optional(),
   volumes: Joi.array().items(Joi.string()).optional(),
 }).optional()
 
@@ -108,8 +108,8 @@ const App = Joi.object({
 const Config = Joi.object({
   version: Joi.string().optional(),
   name: Joi.string().optional(),
-  images: Joi.object({}).pattern(Joi.string(), Image).optional(),
-  tasks: Joi.object({}).pattern(Joi.string(), Task).optional(),
+  images: Joi.object().pattern(Joi.string(), Image).optional(),
+  tasks: Joi.object().pattern(Joi.string(), Task).optional(),
   jobs: Joi.object().pattern(Joi.string(), Job).optional(),
   apps: Joi.object().pattern(Joi.string(), App).optional(),
   // vaults: Joi.object().optional(),

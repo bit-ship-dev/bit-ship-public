@@ -26,12 +26,13 @@ async function init(){
     },
     subCommands: {
       init: () => import('./modules/init/init').then((r) => r.default),
+      run:() => import('./modules/run/run').then((r) => r.run),
+      stop:() => import('./modules/run/stop').then((r) => r.stop),
+      exec:() => import('./modules/run/exec').then((r) => r.exec),
       demon: () => import('./modules/demon/demon').then((r) => r.default),
       image: () => import('./modules/image/image').then((r) => r.default),
-      run:() => import('./modules/run/run').then((r) => r.run),
-      exec:() => import('./modules/run/exec').then((r) => r.exec),
-      hook:() => import('./modules/run/hook').then((r) => r.hook),
       settings:() => import('./modules/settings/settings').then((r) => r.default),
+      hook:() => import('./modules/run/hook').then((r) => r.hook),
     }
   });
   runMain(main);

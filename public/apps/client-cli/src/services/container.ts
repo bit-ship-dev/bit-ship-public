@@ -1,18 +1,22 @@
-import {spawn, exec} from 'child_process';
-import consola from 'consola';
-import {writeFile} from 'fs/promises';
+import {spawn, exec} from 'child_process'
+import consola from 'consola'
+import {writeFile} from 'fs/promises'
 import fs from 'fs';
 
 export const useContainer = () => ({
   runContainer,
-  removeContainer
+  removeContainer,
+  stopContainer
 })
 
 const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
   const args= prepareArgs(opts)
 
   // eslint-disable-next-line sonarjs/no-os-command-from-path
-  const process = spawn('docker', args);
+  const childProcess = spawn('docker', args);
+  if (opts.onSpawn) {
+    opts.onSpawn()
+  }
 
   let logContent = ''
   const log = opts.silentLog ?
@@ -24,10 +28,17 @@ const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
       consola[type](output)
     }
 
+
+  if(!opts.detach) {
+    process.on('SIGINT', cleanup(childProcess));
+    process.on('SIGTERM', cleanup(childProcess));
+    process.on('exit', cleanup(childProcess));
+  }
+
   log('-------------------------- Running task', 'start', false)
-  process.stdout.on('data', (data: any) => log(`${data}`, 'log'));
-  process.stderr.on('data', (data: any) => log(`${data}`,'log'));
-  process.on('close', (code: any) => {
+  childProcess.stdout.on('data', (data: any) => log(`${data}`, 'log'));
+  childProcess.stderr.on('data', (data: any) => log(`${data}`,'log'));
+  childProcess.on('close', (code: any) => {
     resolve(true)
     log(`--------------------------/ Task finished code: ${code}`, 'success', false)
   });
@@ -44,38 +55,8 @@ const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
 })
 
 
-function formatEnv(env: any) {
-  return Object.entries(env).map(([key, value]) => `${key}=${value}`)
-}
 
-
-function prepareArgs(opts){
-  const name = opts.containerName? ['--name', opts.containerName] : ''
-  const env = opts?.env ? ['-e', ...formatEnv(opts.env)]: []
-  const volumes = opts.volumes?.reduce((acc: string[],vol) => {
-    acc.push('-v', vol)
-    return acc
-  },[]) || []
-  const platform = opts.platform ? ['--platform', opts.platform] : []
-  const restart = opts.restart ? ['--restart', opts.restart]: []
-  const rm = opts.remove ? ['--rm'] : []
-  const ports = opts.ports ? ['-p', ...opts.ports] : []
-  const detouched = opts.detouched ? ['-d'] : []
-
-  return  [
-    'run', ...rm, ...name,
-    '-w', '/app', ...env, ...volumes,
-    ...detouched,
-    ...platform,
-    ...restart,
-    ...ports,
-    opts.image, ...opts.script.split(' '),
-  ]
-
-}
-
-
-async function removeContainer  (name: string) {
+async function removeContainer (name: string) {
   return new Promise((resolve) => {
     // eslint-disable-next-line
     exec(`docker stop ${name} && docker rm ${name}`, () => {
@@ -84,20 +65,80 @@ async function removeContainer  (name: string) {
   })
 }
 
+function stopContainer(name: string) {
+  return new Promise((resolve) => {
+    // eslint-disable-next-line
+    exec(`docker stop ${name}`, () => {
+      resolve(true)
+    });
+  })
+
+}
+
+function prepareArgs(opts: RunOptions){
+  const name = opts.containerName? ['--name', opts.containerName] : ''
+  const env = opts?.env ? formatEnv(opts.env) : []
+  const volumes = opts.volumes?.reduce((acc: string[],vol) => {
+    acc.push('-v', vol)
+    return acc
+  },[]) || []
+  const platform = opts.platform ? ['--platform', opts.platform] : []
+  const restart = opts.restart ? ['--restart', opts.restart]: []
+  const rm = opts.remove ? ['--rm'] : []
+  const ports = opts.ports?.reduce((acc: string[],port) => {
+    acc.push('-p', port)
+    return acc
+  },[]) || []
+
+  const detach = opts.detach ? ['-d'] : []
+
+  const args= [
+    'run',
+    ...rm,
+    ...name,
+    '-w', '/app',
+    ...env,
+    ...volumes,
+    ...detach,
+    ...platform,
+    ...restart,
+    ...ports,
+    opts.image, ...opts.script.split(' '),
+  ]
+
+  console.log(args)
+  return args
+}
+
+
+
+const cleanup = (childProcess: any) => () => {
+  if (childProcess && !childProcess.killed) {
+    console.log('\nKilling child process...');
+    childProcess.kill();
+  }
+}
+
+function formatEnv(env: any) {
+  return Object.entries(env).map(([key, value]) => `-e ${key}=${value}`)
+}
+
+
 
 export interface RunOptions {
-  containerName: string;
-  image: string;
-  storeLogs?: boolean;
-  script: string;
-  remove: boolean;
-  platform?: string;
-  detouched?: boolean;
-  silentLog?: boolean;
-  ports?: string[];
-  taskName?: string;
+  onSpawn?: () => void
+  containerName: string
+  image: string
+  storeLogs?: boolean
+  script: string
+  remove: boolean
+  platform?: string
+  detach?: boolean
+  silentLog?: boolean
+  ports?: string[]
+  taskName?: string
   restart?: 'unless-stopped'
-  volumes?: string[];
+  volumes?: string[]
   env?: {
     [key: string]: string
   }

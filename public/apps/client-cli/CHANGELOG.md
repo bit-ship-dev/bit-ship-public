@@ -1,7 +1,7 @@
 ## 0.4.0 (2025-4-18)
 - feature: new App primitive 
 - feature: run command can run apps
-- feature: new command to stoping apps
+- feature: new command to stopping apps
 - feature: new commands to control bit-ship demon 
 - feature: bit-ship demon that runs in background and serves as reverse proxy
 
