@@ -20,6 +20,7 @@ export const stop = defineCommand({
     },
   },
   async run({args}) {
+    consola.start(`Stopping '${args.name}'`);
     const rawName = args.name;
     const config = getConfig()
     const {category, names} = resolveRawName(rawName, config)

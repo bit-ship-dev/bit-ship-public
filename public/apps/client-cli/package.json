@@ -3,7 +3,7 @@
   "description": "Bit-Ship CLI is tool that analyses your code and generates a custom environment for your needs\nYou can use if to local development, CI/CD or even production.",
   "type": "module",
   "public": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "scripts": {
     "start": "node ./bin/bin.js",
     "dev": "rollup --watch",

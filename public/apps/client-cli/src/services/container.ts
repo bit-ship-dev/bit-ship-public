@@ -30,9 +30,9 @@ const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
 
 
   if(!opts.detach) {
-    process.on('SIGINT', cleanup(childProcess));
-    process.on('SIGTERM', cleanup(childProcess));
-    process.on('exit', cleanup(childProcess));
+    process.on('SIGINT', cleanup(childProcess, opts.containerName));
+    process.on('SIGTERM', cleanup(childProcess, opts.containerName));
+    process.on('exit', cleanup(childProcess, opts.containerName));
   }
 
   log('-------------------------- Running task', 'start', false)
@@ -105,17 +105,15 @@ function prepareArgs(opts: RunOptions){
     ...ports,
     opts.image, ...opts.script.split(' '),
   ]
-
-  console.log(args)
   return args
 }
 
 
 
-const cleanup = (childProcess: any) => () => {
+const cleanup = (childProcess: any, container: string) => () => {
   if (childProcess && !childProcess.killed) {
     console.log('\nKilling child process...');
-    childProcess.kill();
+    stopContainer(container)
   }
 }
 
