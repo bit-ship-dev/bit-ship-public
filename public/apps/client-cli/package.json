@@ -14,29 +14,29 @@
     "publish-nightly": "pnpm nightly && npm publish --tag nightly --access public"
   },
   "dependencies": {
-    "@sentry/node": "8.49.0",
+    "@sentry/node": "catalog:public",
     "chalk": "5.4.1",
     "citty": "0.1.6",
-    "confbox": "0.1.8",
-    "consola": "3.3.3",
-    "joi": "17.13.3",
-    "ofetch": "1.4.1",
-    "unstorage": "^1.10.2",
+    "confbox": "catalog:public",
+    "consola": "catalog:public",
+    "joi": "catalog:public",
+    "ofetch": "catalog:public",
+    "unstorage": "catalog:public",
     "uuid": "11.0.3"
   },
   "devDependencies": {
     "@bit-ship/analyser-cli": "workspace:*",
     "@bit-ship/demon": "workspace:*",
     "@bit-ship/types": "workspace:*",
-    "@rollup/plugin-typescript": "^12.1.1",
-    "@rollup/plugin-commonjs": "^28.0.2",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-terser": "0.4.4",
+    "@rollup/plugin-typescript": "catalog:public",
+    "@rollup/plugin-commonjs": "catalog:public",
+    "@rollup/plugin-json": "catalog:public",
+    "@rollup/plugin-terser": "catalog:public",
     "@repo/eslint": "workspace:*",
     "@types/uuid": "^10.0.0",
-    "typescript": "^5.7.2",
-    "rollup": "^4.28.1",
-    "tslib": "^2.8.1"
+    "typescript": "catalog:public",
+    "rollup": "catalog:public",
+    "tslib": "catalog:public"
   },
   "bin": {
     "bit-ship": "bin/bin.js"

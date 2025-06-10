@@ -18,16 +18,16 @@
   },
   "dependencies": {
     "httpxy": "0.1.7",
-    "unstorage": "^1.10.2",
-    "confbox": "0.1.8",
-    "glob": "^11.0.0"
+    "unstorage": "catalog:public",
+    "confbox": "catalog:public",
+    "glob": "catalog:public"
   },
   "devDependencies": {
     "@repo/eslint": "workspace:",
     "@bit-ship/types": "workspace:",
-    "typescript": "catalog:",
-    "@types/node": "catalog:",
-    "rollup": "catalog:",
-    "tslib": "catalog:"
+    "typescript": "catalog:public",
+    "@types/node": "catalog:public",
+    "rollup": "catalog:public",
+    "tslib": "catalog:public"
   }
 }

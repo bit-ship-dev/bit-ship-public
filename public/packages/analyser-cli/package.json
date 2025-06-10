@@ -17,15 +17,15 @@
     ]
   },
   "dependencies": {
-    "consola": "catalog:",
-    "glob": "catalog:"
+    "consola": "catalog:public",
+    "glob": "catalog:public"
   },
   "devDependencies": {
     "@repo/eslint": "workspace:",
     "@bit-ship/types": "workspace:",
-    "typescript": "catalog:",
-    "@types/node": "catalog:",
-    "rollup": "catalog:",
-    "tslib": "catalog:"
+    "typescript": "catalog:public",
+    "@types/node": "catalog:public",
+    "rollup": "catalog:public",
+    "tslib": "catalog:public"
   }
 }
