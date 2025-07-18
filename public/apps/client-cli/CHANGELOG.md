@@ -1,3 +1,9 @@
+## 0.5.0 (2025-7-18)
+- feature: exec by default run sh 
+- feature: attouching container CLI to local process
+- feature: image build script from local dockerfile
+- refactor: container service 
+
 ## 0.4.0 (2025-4-18)
 - feature: new App primitive 
 - feature: run command can run apps

@@ -91,6 +91,7 @@ const Task = Joi.object({
 
 const Image = Joi.object({
   name: Joi.string().required(),
+  build: Joi.string(),
   dependencies: Joi.object().optional(),
 }).optional()
 

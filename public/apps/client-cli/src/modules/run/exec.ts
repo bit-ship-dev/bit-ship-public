@@ -18,7 +18,8 @@ export const exec = defineCommand({
     script: {
       description: 'script to execute',
       type: 'positional',
-      required: true,
+      required: false,
+      default: 'sh',
     },
     image: {
       type: 'string',
@@ -32,7 +33,7 @@ export const exec = defineCommand({
       return consola.error('No image was provided and default image was not found');
     }
     const config = getConfig()
-    const script = args.script;
+    const script = args.script
     const imageName = config.images[args.image].name
     await runContainer({remove: true, containerName, image: imageName, script, volumes: ['./:/app']});
   },

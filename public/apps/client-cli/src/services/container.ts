@@ -9,51 +9,36 @@ export const useContainer = () => ({
   stopContainer
 })
 
-const runContainer = async (opts: RunOptions) => new Promise((resolve) => {
-  const args= prepareArgs(opts)
+const runContainer = async (opts: RunOptions) => new Promise((resolve) => {  
+  let logContent = ''
+  const log = getLogFunction(logContent, opts)
+  let processOpts = {}
+
+  if(!opts.detach) {
+    processOpts = {
+      ...processOpts,
+      stdio: 'inherit',
+      shell: true
+    }
+  }
 
   // eslint-disable-next-line sonarjs/no-os-command-from-path
-  const childProcess = spawn('docker', args);
+  const childProcess = spawn('docker', prepareArgs(opts),processOpts);
   if (opts.onSpawn) {
     opts.onSpawn()
   }
 
-  let logContent = ''
-  const log = opts.silentLog ?
-    (output: any, _type: string, store = true) => {if (store){logContent += '\n' + output}} :
-    (output: any, type: 'log' | 'error' | 'success' | 'start', store = true) => {
-      if (store) {
-        logContent += '\n' + output
-      }
-      consola[type](output)
-    }
-
-
-  if(!opts.detach) {
-    process.on('SIGINT', cleanup(childProcess, opts.containerName));
-    process.on('SIGTERM', cleanup(childProcess, opts.containerName));
-    process.on('exit', cleanup(childProcess, opts.containerName));
-  }
-
   log('-------------------------- Running task', 'start', false)
-  childProcess.stdout.on('data', (data: any) => log(`${data}`, 'log'));
-  childProcess.stderr.on('data', (data: any) => log(`${data}`,'log'));
-  childProcess.on('close', (code: any) => {
-    resolve(true)
-    log(`--------------------------/ Task finished code: ${code}`, 'success', false)
-  });
-
-  if(opts.storeLogs) {
-    const date = new Date()
-    const prefix = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}_${date.getHours()}-${date.getMinutes()}`
-    const path = '.bit-ship/logs'
-    if(!fs.existsSync(path)){
-      fs.mkdirSync(path, { recursive: true });
-    }
-    writeFile(`${path}/${prefix}_${opts.taskName}.log`, logContent)
+  if(opts.detach){ 
+    childProcess.stdout.on('data', (data: any) => log(`${data}`, 'log'));
+    childProcess.stderr.on('data', (data: any) => log(`${data}`,'log'));
+    childProcess.on('close', (code: any) => {
+      resolve(true)
+      log(`--------------------------/ Task finished code: ${code}`, 'success', false)
+    });
   }
+  setupStoreLogs(opts, logContent)
 })
-
 
 
 async function removeContainer (name: string) {
@@ -72,8 +57,31 @@ function stopContainer(name: string) {
       resolve(true)
     });
   })
-
 }
+
+//=================> Helpers
+const getLogFunction = (logContent: string, opts: RunOptions) => opts.silentLog ?
+    (output: any, _type: string, store = true) => {if (store){logContent += '\n' + output}} :
+    (output: any, type: 'log' | 'error' | 'success' | 'start', store = true) => {
+      if (store) {
+        logContent += '\n' + output
+      }
+      consola[type](output)
+    }
+
+function setupStoreLogs(opts: RunOptions, logContent: string) {
+  if(opts.storeLogs) {
+    const date = new Date()
+    const prefix = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}_${date.getHours()}-${date.getMinutes()}`
+    const path = '.bit-ship/logs'
+    if(!fs.existsSync(path)){
+      fs.mkdirSync(path, { recursive: true });
+    }
+    writeFile(`${path}/${prefix}_${opts.taskName}.log`, logContent)
+  }
+}
+
+
 
 function prepareArgs(opts: RunOptions){
   const name = opts.containerName? ['--name', opts.containerName] : ''
@@ -90,7 +98,7 @@ function prepareArgs(opts: RunOptions){
     return acc
   },[]) || []
 
-  const detach = opts.detach ? ['-d'] : []
+  const detach = opts.detach ? ['-d'] : ['-it']
 
   const args= [
     'run',
@@ -99,10 +107,10 @@ function prepareArgs(opts: RunOptions){
     '-w', '/app',
     ...env,
     ...volumes,
-    ...detach,
     ...platform,
     ...restart,
     ...ports,
+    ...detach,
     opts.image, ...opts.script.split(' '),
   ]
   return args
