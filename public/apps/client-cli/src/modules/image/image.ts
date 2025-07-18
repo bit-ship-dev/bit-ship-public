@@ -47,7 +47,7 @@ export default defineCommand({
           return consola.error(`No image with name ${args.imageName} found`)
         }
         consola.start('Building local image')
-        // eslint-disable-next-line sonarjs/no-os-command-from-path
+        // eslint-disable-next-line sonarjs/no-os-command-from-path  sonarjs/os-command
         exec(`docker build -t ${img.name} ${img.build}`, (error, stdout, stderr) => {
           if (error) {
             console.error(error);
