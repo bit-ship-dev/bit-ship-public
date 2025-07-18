@@ -61,13 +61,13 @@ function stopContainer(name: string) {
 
 //=================> Helpers
 const getLogFunction = (logContent: string, opts: RunOptions) => opts.silentLog ?
-    (output: any, _type: string, store = true) => {if (store){logContent += '\n' + output}} :
-    (output: any, type: 'log' | 'error' | 'success' | 'start', store = true) => {
-      if (store) {
-        logContent += '\n' + output
-      }
-      consola[type](output)
+  (output: any, _type: string, store = true) => {if (store){logContent += '\n' + output}} :
+  (output: any, type: 'log' | 'error' | 'success' | 'start', store = true) => {
+    if (store) {
+      logContent += '\n' + output
     }
+    consola[type](output)
+  }
 
 function setupStoreLogs(opts: RunOptions, logContent: string) {
   if(opts.storeLogs) {
