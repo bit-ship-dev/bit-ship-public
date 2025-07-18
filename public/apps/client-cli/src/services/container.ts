@@ -10,6 +10,7 @@ export const useContainer = () => ({
 })
 
 const runContainer = async (opts: RunOptions) => new Promise((resolve) => {  
+  // eslint-disable-next-line prefer-const
   let logContent = ''
   const log = getLogFunction(logContent, opts)
   let processOpts = {}
@@ -114,15 +115,6 @@ function prepareArgs(opts: RunOptions){
     opts.image, ...opts.script.split(' '),
   ]
   return args
-}
-
-
-
-const cleanup = (childProcess: any, container: string) => () => {
-  if (childProcess && !childProcess.killed) {
-    console.log('\nKilling child process...');
-    stopContainer(container)
-  }
 }
 
 function formatEnv(env: any) {
