@@ -1,0 +1,14 @@
+{
+  "name": "bit-ship-public",
+  "private": false,
+  "scripts": {
+    "build": "npm run build",
+    "dev": "npm dev",
+    "lint": "npm lint",
+    "lint:fix": "npm lint -- --fix"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@9.0.0"
+}
