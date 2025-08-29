@@ -1,0 +1,15 @@
+{
+  "name": "@repo/eslint",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "configs/*"
+  ],
+  "devDependencies": {
+    "typescript-eslint": "^8.17.0",
+    "eslint-plugin-sonarjs": "^3.0.0",
+    "eslint-plugin-vue": "^9.29.0",
+    "eslint": "catalog:public"
+  }
+}
