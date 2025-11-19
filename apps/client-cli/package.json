@@ -1,0 +1,68 @@
+{
+  "name": "bit-ship",
+  "description": "Bit-Ship CLI is tool that analyses your code and generates a custom environment for your needs\nYou can use if to local development, CI/CD or even production.",
+  "type": "module",
+  "public": true,
+  "version": "0.5.0",
+  "scripts": {
+    "start": "node ./bin/bin.js",
+    "dev": "rollup --watch",
+    "build": "rollup --config ../../packages/rollup/configs/cli.js && cp ../../packages/analyser-cli/dist/index.mjs ./dist/analyser-cli.js && cp ../../packages/demon/dist/index.mjs ./dist/demon.mjs",
+    "lint": "eslint --config ../../packages/eslint/configs/base.js ./src",
+    "nightly": "node ./cli/nightly.mjs",
+    "typecheck": "tsc --noEmit",
+    "publish-nightly": "pnpm nightly && npm publish --tag nightly --access public"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@sentry/node": "catalog:public",
+    "chalk": "5.4.1",
+    "commander": "14.0.0",
+    "confbox": "catalog:public",
+    "consola": "catalog:public",
+    "glob": "catalog:public",
+    "ohash": "catalog:public",
+    "joi": "catalog:public",
+    "ofetch": "catalog:public",
+    "@bit-ship/local-sdk": "workspace:",
+    "unstorage": "catalog:public",
+    "uuid": "11.0.3",
+    "@bit-ship/analyser-cli": "workspace:*",
+    "@bit-ship/demon": "workspace:*",
+    "@bit-ship/types": "workspace:*",
+    "@rollup/plugin-typescript": "catalog:public",
+    "@rollup/plugin-commonjs": "catalog:public",
+    "@repo/eslint": "workspace:*",
+    "@types/uuid": "11.0.0",
+    "typescript": "catalog:public",
+    "rollup": "catalog:public",
+    "tslib": "catalog:public"
+  },
+  "bin": {
+    "bit-ship": "bin/bin.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/bit-ship-dev/bit-ship-public/blob/main/LICENSE"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bit-ship-dev/bit-ship-public"
+  },
+  "keywords": [
+    "bit-ship",
+    "cli",
+    "env",
+    "environment",
+    "tooling",
+    "analyser",
+    "analyzer"
+  ],
+  "homepage": "https://www.bit-ship.com",
+  "bugs": {
+    "url": "https://discord.com/channels/1260997714049630268/1325444528546643979"
+  }
+}

@@ -1,0 +1,39 @@
+#IDE
+.idea
+.fleet
+.history
+
+# Dependencies
+node_modules
+.pnpm-store
+.npmrc
+
+# Testing
+coverage
+__mockup__
+
+# Build Outputs
+out/
+build
+dist
+.output
+.data
+.nuxt
+.nitro
+.cache
+.turbo
+node-compile-cache
+
+# Debug
+npm-debug.log*
+logs
+*.log
+
+# Misc
+.DS_Store
+*.pem
+.keys
+
+# USED FOR PUBLISHING TO PUBLIC REPO
+tmp
+
