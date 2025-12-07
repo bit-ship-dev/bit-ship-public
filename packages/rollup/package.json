@@ -1,0 +1,15 @@
+{
+  "name": "@repo/rollup",
+  "version": "1.0.0",
+  "type": "module",
+  "files": [
+    "configs/*"
+  ],
+  "dependencies": {
+    "@rollup/plugin-commonjs": "catalog:public",
+    "@rollup/plugin-node-resolve": "catalog:public",
+    "@rollup/plugin-typescript": "catalog:public",
+    "@rollup/plugin-json": "catalog:public",
+    "rollup": "catalog:public"
+  }
+}

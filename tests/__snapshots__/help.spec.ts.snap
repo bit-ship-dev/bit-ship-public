@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Help > bit-ship -h 1`] = `
+"Usage: bit-ship [options] [command]
+
+Bit-Ship CLI https://www.bit-ship.dev
+
+Options:
+  -V, --version             output the version number
+  -h, --help                display help for command
+
+Commands:
+  init                      Initialize bit-ship in your project
+  run [options] <name>      Run bit-ship
+  stop <name>               Stop tasks, jobs and apps
+  exec [options] <command>  Execute bit-ship command
+  hook <name>               ! Internal Job !
+  image                     Creat, Edit or rebuild image
+  demon                     Manage bit-ship demon
+  settings                  Manage bit-ship settings
+  help [command]            display help for command
+
+Commands docs: https://www.bit-ship.dev/docs/cli/commands
+"
+`;
+
+exports[`Help > bit-ship -h 2`] = `
+"Usage: bit-ship run [options] <name>
+
+Run bit-ship
+
+Options:
+  -d, --detach <char>
+  -h, --help           display help for command
+"
+`;
+
+exports[`Help > bit-ship -h 3`] = `
+"Usage: bit-ship exec [options] <command>
+
+Execute bit-ship command
+
+Options:
+  -i, --image <image-name>  Image to use
+  -h, --help                display help for command
+"
+`;

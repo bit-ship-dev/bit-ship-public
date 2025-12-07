@@ -1,0 +1,35 @@
+{
+  "name": "@bit-ship/local-sdk",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "rollup --config ../rollup/configs/lib.js",
+    "lint": "eslint --config ../eslint/configs/base.js ./src",
+    "lint:fix": "eslint --config ../eslint/configs/base.js ./src --fix",
+    "drizzle-generate": "npx drizzle-kit generate",
+    "drizzle-migrate": "npx drizzle-kit migrate"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "buildOptions": {
+    "formats": [
+      "es"
+    ]
+  },
+  "dependencies": {
+    "unstorage": "catalog:public",
+    "joi": "catalog:public",
+    "confbox": "catalog:public",
+    "consola": "catalog:public"
+  },
+  "devDependencies": {
+    "@repo/eslint": "workspace:",
+    "@repo/rollup": "workspace:",
+    "@bit-ship/types": "workspace:",
+    "typescript": "catalog:public",
+    "@types/node": "catalog:public",
+    "rollup": "catalog:public",
+    "tslib": "catalog:public"
+  }
+}

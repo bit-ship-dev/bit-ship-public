@@ -1,0 +1,70 @@
+{
+  "name": "bit-ship",
+  "description": "Bit-Ship CLI is tool that analyses your code and generates a custom environment for your needs\nYou can use if to local development, CI/CD or even production.",
+  "type": "module",
+  "public": true,
+  "version": "0.5.0",
+  "scripts": {
+    "start": "node ./bin/bin.js",
+    "dev": "rollup --watch",
+    "build": "rollup --config ../../packages/rollup/configs/cli.js && cp ../../packages/analyser-cli/dist/index.mjs ./dist/analyser-cli.js && cp ../../packages/demon/dist/index.mjs ./dist/demon.mjs",
+    "lint": "eslint --config ../../packages/eslint/configs/base.js ./src",
+    "lint:fix": "eslint --config ../../packages/eslint/configs/base.js ./src --fix",
+    "nightly": "node ./cli/nightly.mjs",
+    "typecheck": "tsc --noEmit",
+    "publish-nightly": "pnpm nightly && npm publish --tag nightly --access public"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "events": "^3.3.0",
+    "@bit-ship/analyser-cli": "workspace:*",
+    "@bit-ship/demon": "workspace:*",
+    "@bit-ship/local-sdk": "workspace:",
+    "@bit-ship/types": "workspace:*",
+    "@repo/eslint": "workspace:*",
+    "@rollup/plugin-commonjs": "catalog:public",
+    "@rollup/plugin-typescript": "catalog:public",
+    "@sentry/node": "catalog:public",
+    "@types/uuid": "11.0.0",
+    "chalk": "5.4.1",
+    "commander": "14.0.0",
+    "confbox": "catalog:public",
+    "consola": "catalog:public",
+    "glob": "catalog:public",
+    "joi": "catalog:public",
+    "ofetch": "catalog:public",
+    "ohash": "catalog:public",
+    "rollup": "catalog:public",
+    "tslib": "catalog:public",
+    "typescript": "catalog:public",
+    "unstorage": "catalog:public",
+    "uuid": "11.0.3"
+  },
+  "bin": {
+    "bit-ship": "bin/bin.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/bit-ship-dev/bit-ship-public/blob/main/LICENSE"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bit-ship-dev/bit-ship-public"
+  },
+  "keywords": [
+    "bit-ship",
+    "cli",
+    "env",
+    "environment",
+    "tooling",
+    "analyser",
+    "analyzer"
+  ],
+  "homepage": "https://www.bit-ship.com",
+  "bugs": {
+    "url": "https://discord.com/channels/1260997714049630268/1325444528546643979"
+  }
+}

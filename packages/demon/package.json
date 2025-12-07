@@ -1,0 +1,40 @@
+{
+  "name": "@bit-ship/demon",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node dist/index.mjs",
+    "dev": "rollup --config ../rollup/configs/cli-packaged.js --watch",
+    "build": "rollup --config ../rollup/configs/cli-packaged.js",
+    "lint": "eslint --config ../eslint/configs/base.js ./src",
+    "lint:fix": "eslint --config ../eslint/configs/base.js ./src --fix"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "buildOptions": {
+    "formats": [
+      "es"
+    ]
+  },
+  "dependencies": {
+    "httpxy": "0.1.7",
+    "unstorage": "catalog:public",
+    "confbox": "catalog:public",
+    "glob": "catalog:public",
+    "@bit-ship/local-sdk": "workspace:",
+    "@trpc/server": "11.5.1",
+    "ws": "8.18.3",
+    "ohash": "catalog:public",
+    "joi": "catalog:public",
+    "isomorphic-git": "1.33.1"
+  },
+  "devDependencies": {
+    "@repo/eslint": "workspace:",
+    "@bit-ship/types": "workspace:",
+    "typescript": "catalog:public",
+    "@types/node": "catalog:public",
+    "rollup": "catalog:public",
+    "tslib": "catalog:public"
+  }
+}

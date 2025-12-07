@@ -1,0 +1,32 @@
+{
+  "name": "@bit-ship/analyser-cli",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node dist/index.mjs",
+    "dev": "rollup --config ../rollup/configs/cli-packaged.js --watch",
+    "build": "rollup --config ../rollup/configs/cli-packaged.js",
+    "lint": "eslint --config ../eslint/configs/base.js ./src",
+    "lint:fix": "eslint --config ../eslint/configs/base.js ./src --fix"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "buildOptions": {
+    "formats": [
+      "es"
+    ]
+  },
+  "dependencies": {
+    "consola": "catalog:public",
+    "glob": "catalog:public"
+  },
+  "devDependencies": {
+    "@repo/eslint": "workspace:",
+    "@bit-ship/types": "workspace:",
+    "typescript": "catalog:public",
+    "@types/node": "catalog:public",
+    "rollup": "catalog:public",
+    "tslib": "catalog:public"
+  }
+}
